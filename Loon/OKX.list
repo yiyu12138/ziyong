@@ -1,0 +1,18 @@
+# NAME: OKX
+# DESC: OKX / OKEx App、网页、行情、链上浏览器
+# AUTHOR: yiyu12138
+# REPO: https://github.com/yiyu12138/loon-rules
+# UPDATED: 2026-09-20
+#
+# 想走代理：导入时策略选日本 / 新加坡 / 美国 / 香港。
+# 想走直连：不要把策略设成 DIRECT。Loon 开着时 DIRECT 仍走 TUN，
+#          www.okx.com 会 Host is down / -530，打卡转圈。
+#          正确做法是 Loon → 设置 → 增强模式 → 跳过代理的 App → 勾选 OKX。
+# 位置：放在 GEOIP,cn 和 FINAL 之前。
+
+DOMAIN-SUFFIX,okx.com
+DOMAIN-SUFFIX,okex.com
+DOMAIN-SUFFIX,oklink.com
+DOMAIN-SUFFIX,okx-dns.com
+DOMAIN-SUFFIX,okx-dns1.com
+DOMAIN-SUFFIX,okx-dns2.com
