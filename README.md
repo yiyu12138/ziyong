@@ -1,12 +1,12 @@
 # KISS Translator（Scripting 兼容版）
 
-适用于 iOS Safari + Scripting 的 KISS Translator 用户脚本。
+适用于 iOS Safari + Scripting 的 KISS Translator。
 
 ## 一键安装
 
-点击下面的链接，尝试直接在 Safari 中打开脚本：
+安装下面这个 **Scripting 兼容加载版**：
 
-[KISS Translator 一键安装](https://raw.githubusercontent.com/yiyu12138/ziyong/main/KISS-Translator-Scripting-v2.1.0.user.js)
+[点击安装 KISS Translator](https://raw.githubusercontent.com/yiyu12138/ziyong/main/KISS-Translator-Scripting-v2.1.0.user.js)
 
 如果没有自动进入 Scripting：
 
@@ -14,28 +14,47 @@
 
 ## 安装 URL
 
-下面的代码块在 GitHub 页面会自带「复制」按钮，可以直接复制：
+GitHub 页面中的代码块会提供复制按钮：
 
 ```
 https://raw.githubusercontent.com/yiyu12138/ziyong/main/KISS-Translator-Scripting-v2.1.0.user.js
 ```
 
-## 说明
+## 本次修复
 
-这是针对 **Scripting Safari 浏览器脚本** 修改的兼容版本。
+之前的版本虽然能够被 Scripting 识别和匹配，但在真正执行时出现：
 
-- 支持 Scripting 的 GM API
-- 使用 `document-start` 注入
-- 保留 KISS Translator 原有翻译功能
-- 支持原脚本中的翻译服务配置
-- 脚本地址固定在本仓库根目录，避免之前的路径 404
+```
+failed to parse browser userscript
+Function statements must have a name.
+```
+
+原因是 Scripting 在执行 Safari 用户脚本时，会通过 AsyncFunction 解析整个大型压缩脚本。KISS Translator 本身包含大量压缩后的函数表达式和异步代码，在这个解析路径下触发了 Safari/WebKit 的语法解析问题。
+
+现在改成：
+
+**Scripting 用户脚本 → 加载器 → GM.xmlHttpRequest → 普通 Function 执行核心代码**
+
+核心文件：
+
+```
+https://raw.githubusercontent.com/yiyu12138/ziyong/main/KISS-Translator-Scripting-core-v2.1.0.js
+```
+
+这样可以避开 Scripting 对大型核心脚本使用 AsyncFunction 的解析路径。
+
+## 文件说明
+
+- `KISS-Translator-Scripting-v2.1.0.user.js`：Scripting 安装入口
+- `KISS-Translator-Scripting-core-v2.1.0.js`：KISS Translator 核心代码
 
 ## HTTP 404
 
-如果 Scripting 导入时出现 HTTP 404，请确认使用上面的完整 Raw URL，不要使用 GitHub 网页地址。
+如果出现 HTTP 404，请使用上面的完整 Raw URL，不要使用 GitHub 网页地址。
 
-正确地址：
+正确安装地址：
 
 ```
 https://raw.githubusercontent.com/yiyu12138/ziyong/main/KISS-Translator-Scripting-v2.1.0.user.js
 ```
+
