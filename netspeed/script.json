@@ -1,7 +1,7 @@
 {
   "name": "网速",
   "description": "Scripting 版 NetSpeed。下载 3MB 估算当前网速。",
-  "color": "systemBlue",
+  "color": "systemPurple",
   "runInApp": false,
   "icon": "speedometer",
   "author": {
@@ -15,7 +15,7 @@
   "entry": "index.tsx",
   "iconImage": "",
   "contributors": [],
-  "version": "1.0.0",
+  "version": "1.1.0",
   "localizedDescriptions": {
     "zh": "下载测速，点小组件重新测一次",
     "en": "Download speed test. Tap the widget to measure again.",
