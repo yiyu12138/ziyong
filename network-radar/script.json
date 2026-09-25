@@ -1,0 +1,43 @@
+{
+  "name": "网络诊断雷达",
+  "description": "把 Egern 网络诊断雷达改成 Scripting 小组件。请求走系统当前网络，不能指定 Egern 策略组。",
+  "color": "systemBlue",
+  "runInApp": true,
+  "icon": "waveform.path.ecg",
+  "author": {
+    "name": "yiyu12138",
+    "homepage": "https://github.com/yiyu12138/ziyong",
+    "email": null
+  },
+  "remoteResource": null,
+  "intentInputTypes": [],
+  "permissions": [],
+  "entry": "index.tsx",
+  "iconImage": "",
+  "contributors": [],
+  "version": "1.0.0",
+  "localizedDescriptions": {
+    "zh": "网络诊断雷达的 Scripting 小组件。检测出口、延迟、流媒体和 AI 可达性。",
+    "en": "Scripting widget port of the network diagnostic radar.",
+    "ja": "",
+    "ko": "",
+    "fr": "",
+    "de": "",
+    "es": "",
+    "pt": "",
+    "ru": "",
+    "it": ""
+  },
+  "localizedNames": {
+    "zh": "网络诊断雷达",
+    "en": "Network Radar",
+    "ja": "",
+    "ko": "",
+    "fr": "",
+    "de": "",
+    "es": "",
+    "pt": "",
+    "ru": "",
+    "it": ""
+  }
+}
