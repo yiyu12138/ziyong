@@ -15,7 +15,7 @@
   "entry": "index.tsx",
   "iconImage": "",
   "contributors": [],
-  "version": "1.1.0",
+  "version": "1.2.0",
   "localizedDescriptions": {
     "zh": "下载测速，点小组件重新测一次",
     "en": "Download speed test. Tap the widget to measure again.",

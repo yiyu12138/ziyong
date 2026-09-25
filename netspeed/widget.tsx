@@ -24,7 +24,7 @@ async function measure() {
   }
 }
 
-const PURPLE = '#BF5AF2'
+const PURPLE = '#7446D8'
 
 function tone(mbps: number) {
   if (mbps >= 50) return { icon: 'bolt.fill', color: PURPLE }
@@ -54,7 +54,7 @@ function View({ speed }: { speed: any }) {
         </HStack>
         <Spacer />
         <Text font={small ? 'title' : 'largeTitle'} fontWeight="bold" foregroundStyle={look.color}>{speed.mbps || 0} Mbps</Text>
-        <HStack spacing={0} frame={{ width, height: 4 }} background={{ light: '#E9D5FF', dark: '#3B2454' }} clipShape={{ type: 'rect', cornerRadius: 2 }}>
+        <HStack spacing={0} frame={{ width, height: 4 }} background={{ light: '#E8E8ED', dark: '#202025' }} clipShape={{ type: 'rect', cornerRadius: 2 }}>
           <HStack frame={{ width: fill, height: 4 }} background={look.color} />
         </HStack>
         <HStack frame={{ width }}>
