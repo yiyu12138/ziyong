@@ -1,0 +1,43 @@
+{
+  "name": "网速",
+  "description": "Scripting 版 NetSpeed。下载 3MB 估算当前网速。",
+  "color": "systemBlue",
+  "runInApp": false,
+  "icon": "speedometer",
+  "author": {
+    "name": "yiyu12138",
+    "homepage": "https://github.com/yiyu12138/ziyong",
+    "email": null
+  },
+  "remoteResource": null,
+  "intentInputTypes": [],
+  "permissions": [],
+  "entry": "index.tsx",
+  "iconImage": "",
+  "contributors": [],
+  "version": "1.0.0",
+  "localizedDescriptions": {
+    "zh": "下载测速，点小组件重新测一次",
+    "en": "Download speed test. Tap the widget to measure again.",
+    "ja": "",
+    "ko": "",
+    "fr": "",
+    "de": "",
+    "es": "",
+    "pt": "",
+    "ru": "",
+    "it": ""
+  },
+  "localizedNames": {
+    "zh": "网速",
+    "en": "NetSpeed",
+    "ja": "",
+    "ko": "",
+    "fr": "",
+    "de": "",
+    "es": "",
+    "pt": "",
+    "ru": "",
+    "it": ""
+  }
+}
