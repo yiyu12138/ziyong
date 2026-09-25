@@ -15,7 +15,7 @@
   "entry": "index.tsx",
   "iconImage": "",
   "contributors": [],
-  "version": "1.0.1",
+  "version": "1.2.0",
   "localizedDescriptions": {
     "zh": "显示订阅剩余流量、已用流量和到期时间",
     "en": "Show subscription remaining traffic and expiry",
