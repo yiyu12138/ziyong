@@ -1,9 +1,9 @@
 {
-  "name": "网络诊断雷达",
-  "description": "Scripting 版网络诊断雷达。请求走系统当前网络。",
-  "color": "systemBlue",
+  "name": "订阅流量",
+  "description": "Scripting 版订阅流量小组件。订阅地址在脚本设置里填写。",
+  "color": "systemPurple",
   "runInApp": false,
-  "icon": "waveform.path.ecg",
+  "icon": "chart.pie.fill",
   "author": {
     "name": "yiyu12138",
     "homepage": "https://github.com/yiyu12138/ziyong",
@@ -15,10 +15,10 @@
   "entry": "index.tsx",
   "iconImage": "",
   "contributors": [],
-  "version": "1.2.0",
+  "version": "1.0.0",
   "localizedDescriptions": {
-    "zh": "检测当前网络出口和延迟",
-    "en": "Check the current network exit and latency",
+    "zh": "显示订阅剩余流量、已用流量和到期时间",
+    "en": "Show subscription remaining traffic and expiry",
     "ja": "",
     "ko": "",
     "fr": "",
@@ -29,8 +29,8 @@
     "it": ""
   },
   "localizedNames": {
-    "zh": "网络诊断雷达",
-    "en": "Network Radar",
+    "zh": "订阅流量",
+    "en": "Subscription",
     "ja": "",
     "ko": "",
     "fr": "",
