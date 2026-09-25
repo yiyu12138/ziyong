@@ -15,7 +15,7 @@
   "entry": "index.tsx",
   "iconImage": "",
   "contributors": [],
-  "version": "1.1.0",
+  "version": "1.2.0",
   "localizedDescriptions": {
     "zh": "检测当前网络出口和延迟",
     "en": "Check the current network exit and latency",
