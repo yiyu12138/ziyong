@@ -1,4 +1,5 @@
-import { Widget, VStack, HStack, Text, Spacer, Image, Script, fetch } from 'scripting'
+import { Widget, VStack, HStack, Text, Spacer, Image, Script, fetch, Button, modifiers } from 'scripting'
+import { RefreshDingyueIntent } from './app_intents'
 
 const SETTINGS_KEY = 'dingyue.settings.v1'
 const CACHE_KEY = 'dingyue.cache.v1'
@@ -178,7 +179,12 @@ function View({ data }: { data: any }) {
   const days = traffic ? daysRemaining(traffic.expireAt) : null
   const daily = days && days > 0 && traffic && Number.isFinite(traffic.remaining) ? traffic.remaining / days : null
   return (
-    <VStack alignment="leading" spacing={6} padding={small ? 12 : 14} frame={{ maxWidth: 'infinity', maxHeight: 'infinity' }} background={{ light: '#FFFFFF', dark: '#050506' }}>
+    <Button
+      intent={RefreshDingyueIntent(undefined)}
+      buttonStyle="plain"
+      modifiers={modifiers().frame({ maxWidth: 'infinity', maxHeight: 'infinity' })}
+    >
+      <VStack alignment="leading" spacing={6} padding={small ? 12 : 14} frame={{ maxWidth: 'infinity', maxHeight: 'infinity' }}>
       <HStack>
         <Image systemName="chart.pie.fill" resizable scaleToFit frame={{ width: 14, height: 14 }} foregroundStyle="#7446D8" />
         <Text font="caption2" fontWeight="bold" foregroundStyle="secondaryLabel">SUBSCRIPTION</Text>
@@ -231,7 +237,8 @@ function View({ data }: { data: any }) {
           <Spacer />
         </VStack>
       )}
-    </VStack>
+      </VStack>
+    </Button>
   )
 }
 
