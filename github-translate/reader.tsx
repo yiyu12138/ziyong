@@ -14,45 +14,44 @@ import {
   fetch,
 } from 'scripting'
 
-type Repo = { owner: string; repo: string; branch: string; path: string }
+type Repo = { owner: string; repo: string; branch: string }
 
 function parseGitHub(input: string): Repo | null {
   const value = String(input || '').trim()
-  const match = value.match(/github\.com\/([^/\s]+)\/([^/\s?#]+)(?:\/(?:blob|tree|raw)\/([^/\s?#]+)(?:\/([^?#]*))?)?/i)
+  const match = value.match(/github\.com\/([^/\s]+)\/([^/\s?#]+)/i)
   if (!match) return null
   return {
     owner: match[1],
     repo: match[2].replace(/\.git$/i, ''),
-    branch: match[3] || '',
-    path: decodeURIComponent(match[4] || ''),
+    branch: '',
   }
 }
 
 async function readText(url: string) {
-  const response = await fetch(url, { timeout: 15, headers: { Accept: 'application/vnd.github+json', 'User-Agent': 'Scripting' } })
+  const response = await fetch(url, { timeout: 15, headers: { Accept: 'application/vnd.github.raw+json', 'User-Agent': 'Scripting' } })
   if (response.status < 200 || response.status >= 300) throw new Error('HTTP ' + response.status)
   return (await response.text()) || ''
 }
 
 async function resolve(input: string) {
-  const repo = parseGitHub(input)
-  if (!repo) throw new Error('这不是 GitHub 仓库或文件链接。')
-  let branch = repo.branch
-  if (!branch) {
-    const info = JSON.parse(await readText(`https://api.github.com/repos/${repo.owner}/${repo.repo}`))
-    branch = String(info.default_branch || 'main')
+  const direct = parseGitHub(input)
+  let owner = direct?.owner || ''
+  let repo = direct?.repo || ''
+  if (!owner || !repo) {
+    const query = String(input || '').trim().replace(/^https?:\/\/github\.com\//i, '').split(/[/?#]/)[0]
+    if (!query) throw new Error('请分享 GitHub 仓库页面。')
+    const found = JSON.parse(await readText('https://api.github.com/search/repositories?q=' + encodeURIComponent(query + ' in:name') + '&per_page=1'))
+    const item = found.items?.[0]
+    if (!item?.full_name) throw new Error('没有找到这个 GitHub 仓库。')
+    const parts = String(item.full_name).split('/')
+    owner = parts[0]
+    repo = parts[1]
   }
-  const candidates = repo.path ? [repo.path] : ['README.md', 'readme.md', 'README.en.md', 'Readme.md']
-  let lastError = '没有找到 Markdown 文件。'
-  for (const path of candidates) {
-    try {
-      const markdown = await readText(`https://raw.githubusercontent.com/${repo.owner}/${repo.repo}/${branch}/${path}`)
-      if (markdown.trim()) return { title: `${repo.owner}/${repo.repo}`, file: path, markdown }
-    } catch (error) {
-      lastError = String(error)
-    }
-  }
-  throw new Error(lastError)
+  const info = JSON.parse(await readText(`https://api.github.com/repos/${owner}/${repo}`))
+  const branch = String(info.default_branch || 'main')
+  const markdown = await readText(`https://raw.githubusercontent.com/${owner}/${repo}/${branch}/README.md`)
+  if (!markdown.trim()) throw new Error('这个仓库没有 README.md。')
+  return { title: `${owner}/${repo}`, file: 'README.md', markdown }
 }
 
 function chunks(text: string) {
@@ -83,7 +82,7 @@ export function Reader({ url }: { url: string }) {
     setBusy(true)
     setTranslated('')
     setOriginal('')
-    setStatus('正在读取 Markdown…')
+    setStatus('正在读取 README.md…')
     try {
       const source = await resolve(input)
       setTitle(source.title)
