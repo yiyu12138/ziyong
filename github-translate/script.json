@@ -1,0 +1,43 @@
+{
+  "name": "GitHub 翻译",
+  "description": "从分享面板接收 GitHub 链接，翻译仓库里的 Markdown。",
+  "color": "systemBlue",
+  "runInApp": false,
+  "icon": "text.book.closed",
+  "author": {
+    "name": "yiyu12138",
+    "homepage": "https://github.com/yiyu12138/ziyong",
+    "email": null
+  },
+  "remoteResource": null,
+  "intentInputTypes": ["URLs", "Text"],
+  "permissions": [],
+  "entry": "index.tsx",
+  "iconImage": "",
+  "contributors": [],
+  "version": "1.0.0",
+  "localizedDescriptions": {
+    "zh": "分享 GitHub 仓库或 Markdown 链接，阅读中文译文",
+    "en": "Share a GitHub repository or Markdown link and read it in Chinese",
+    "ja": "",
+    "ko": "",
+    "fr": "",
+    "de": "",
+    "es": "",
+    "pt": "",
+    "ru": "",
+    "it": ""
+  },
+  "localizedNames": {
+    "zh": "GitHub 翻译",
+    "en": "GitHub Translate",
+    "ja": "",
+    "ko": "",
+    "fr": "",
+    "de": "",
+    "es": "",
+    "pt": "",
+    "ru": "",
+    "it": ""
+  }
+}
