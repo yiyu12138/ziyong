@@ -8,6 +8,8 @@ import {
   ProgressView,
   Markdown,
   useState,
+  useEffect,
+  useMemo,
   Clipboard,
   fetch,
 } from 'scripting'
@@ -40,9 +42,7 @@ async function resolve(input: string) {
     const info = JSON.parse(await readText(`https://api.github.com/repos/${repo.owner}/${repo.repo}`))
     branch = String(info.default_branch || 'main')
   }
-  const candidates = repo.path
-    ? [repo.path]
-    : ['README.md', 'readme.md', 'README.en.md', 'Readme.md']
+  const candidates = repo.path ? [repo.path] : ['README.md', 'readme.md', 'README.en.md', 'Readme.md']
   let lastError = '没有找到 Markdown 文件。'
   for (const path of candidates) {
     try {
@@ -58,10 +58,10 @@ async function resolve(input: string) {
 function chunks(text: string) {
   const parts: string[] = []
   let rest = text
-  while (rest.length > 1200) {
-    let cut = rest.lastIndexOf('\n\n', 1200)
-    if (cut < 600) cut = rest.lastIndexOf('\n', 1200)
-    if (cut < 600) cut = 1200
+  while (rest.length > 1600) {
+    let cut = rest.lastIndexOf('\n\n', 1600)
+    if (cut < 800) cut = rest.lastIndexOf('\n', 1600)
+    if (cut < 800) cut = 1600
     parts.push(rest.slice(0, cut))
     rest = rest.slice(cut)
   }
@@ -69,17 +69,8 @@ function chunks(text: string) {
   return parts
 }
 
-async function translateMarkdown(text: string) {
-  const pieces = chunks(text)
-  const result: string[] = []
-  for (const piece of pieces) {
-    const translated = await Translation.shared.translate({ text: piece, target: 'zh' })
-    result.push(String(translated || piece))
-  }
-  return result.join('')
-}
-
 export function Reader({ url }: { url: string }) {
+  const translation = useMemo(() => new Translation(), [])
   const [status, setStatus] = useState(url ? '正在读取 Markdown…' : '先从 GitHub 分享一个仓库或 .md 文件。')
   const [title, setTitle] = useState('GitHub 翻译')
   const [file, setFile] = useState('')
@@ -98,8 +89,14 @@ export function Reader({ url }: { url: string }) {
       setTitle(source.title)
       setFile(source.file)
       setOriginal(source.markdown)
-      setStatus('正在翻译，长文可能要等一会儿。')
-      setTranslated(await translateMarkdown(source.markdown))
+      const pieces = chunks(source.markdown)
+      const result: string[] = []
+      for (let index = 0; index < pieces.length; index += 1) {
+        setStatus(`正在翻译 ${index + 1}/${pieces.length}`)
+        const value = await translation.translate({ text: pieces[index], source: 'en', target: 'zh' })
+        result.push(String(value || pieces[index]))
+        setTranslated(result.join(''))
+      }
       setStatus('')
     } catch (error) {
       setStatus(error instanceof Error ? error.message : String(error))
@@ -108,12 +105,14 @@ export function Reader({ url }: { url: string }) {
     }
   }
 
-  if (url && !original && !busy && status === '正在读取 Markdown…') open(url)
+  useEffect(() => {
+    if (url) open(url)
+  }, [])
 
   return (
     <NavigationStack>
       <ScrollView navigationTitle={title}>
-        <VStack alignment="leading" spacing={12} padding={16}>
+        <VStack alignment="leading" spacing={12} padding={16} translationHost={translation}>
           <Text font="caption" foregroundStyle="secondaryLabel">{file || '分享 GitHub 仓库或 Markdown 链接'}</Text>
           {busy ? <ProgressView /> : null}
           {status ? <Text>{status}</Text> : null}

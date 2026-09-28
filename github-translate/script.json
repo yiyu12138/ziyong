@@ -15,7 +15,7 @@
   "entry": "index.tsx",
   "iconImage": "",
   "contributors": [],
-  "version": "1.0.0",
+  "version": "1.1.0",
   "localizedDescriptions": {
     "zh": "分享 GitHub 仓库或 Markdown 链接，阅读中文译文",
     "en": "Share a GitHub repository or Markdown link and read it in Chinese",
