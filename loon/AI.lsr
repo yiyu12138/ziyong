@@ -37,8 +37,6 @@ DOMAIN-SUFFIX, oaiusercontent.com
 DOMAIN-SUFFIX, openai.com
 DOMAIN-SUFFIX, sora.com
 
-# Muse
-DOMAIN-SUFFIX, muse.ai
 
 # Claude
 DOMAIN-SUFFIX, anthropic.com
