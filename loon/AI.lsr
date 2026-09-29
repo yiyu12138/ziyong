@@ -45,6 +45,9 @@ DOMAIN-SUFFIX, claudeusercontent.com
 IP-CIDR, 160.79.104.0/23, no-resolve
 IP-CIDR6, 2607:6bc0::/48, no-resolve
 
+# Muse
+DOMAIN-SUFFIX, muse.ai
+
 # Manus
 DOMAIN-SUFFIX, manus.im
 DOMAIN-SUFFIX, manuscdn.com
