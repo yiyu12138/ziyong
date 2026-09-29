@@ -8,4 +8,4 @@ Loon AI 规则：https://raw.githubusercontent.com/yiyu12138/ziyong/main/loon/AI
 
 GitHub 翻译：https://raw.githubusercontent.com/yiyu12138/ziyong/main/github-translate/github-translate-1.2.scripting
 
-Loon Muse 规则：https://raw.githubusercontent.com/yiyu12138/ziyong/main/loon/Muse.lsr
+Loon Mause 规则：https://raw.githubusercontent.com/yiyu12138/ziyong/main/loon/Mause.lsr
