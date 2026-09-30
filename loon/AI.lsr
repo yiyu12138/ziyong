@@ -51,3 +51,14 @@ DOMAIN-SUFFIX, muse.ai
 # Manus
 DOMAIN-SUFFIX, manus.im
 DOMAIN-SUFFIX, manuscdn.com
+
+# x.ai / Grok
+DOMAIN-SUFFIX, x.ai
+DOMAIN-SUFFIX, grok.com
+DOMAIN-KEYWORD, grokbot
+
+# Cursor
+DOMAIN-SUFFIX, cursor.com
+DOMAIN-SUFFIX, cursor.sh
+DOMAIN-SUFFIX, cursorapi.com
+DOMAIN-SUFFIX, cursor-cdn.com
