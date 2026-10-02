@@ -6,7 +6,7 @@ const TUNNEL_KEY = 'netspeed.tunnel.v1'
 
 const DOWN_URL = 'https://speed.cloudflare.com/__down?bytes=26214400'
 const WARMUP_URL = 'https://speed.cloudflare.com/__down?bytes=1048576'
-const TRACE_URL = 'https://speed.cloudflare.com/meta'
+const GEO_URL = 'http://ip-api.com/json/?fields=status,countryCode,query'
 
 async function drain(response: any, limitMs: number) {
   const started = Date.now()
@@ -36,14 +36,26 @@ async function warmUp() {
 }
 
 async function detectTunnel() {
-  try {
-    const response = await fetch(TRACE_URL, { timeout: 6, headers: { 'Cache-Control': 'no-cache' } })
-    const meta = JSON.parse((await response.text()) || '{}')
-    const country = String(meta?.country || meta?.clientIp && meta.country || '').toUpperCase()
-    return country && country !== 'CN'
-  } catch {
-    return false
+  const tryOne = async (url: string) => {
+    const response = await fetch(url, { timeout: 8, headers: { 'Cache-Control': 'no-cache', Accept: 'application/json' } })
+    const text = (await response.text()) || ''
+    const data = JSON.parse(text)
+    const code = String(data?.countryCode || data?.country_code || data?.country || '').toUpperCase()
+    return code
   }
+  let code = ''
+  try {
+    code = await tryOne(GEO_URL)
+  } catch {
+    try {
+      code = await tryOne('https://ipwho.is/')
+    } catch {
+      code = ''
+    }
+  }
+  // 出口不在中国大陆，就认为当前走了代理/VPN。
+  if (!code) return null
+  return code !== 'CN'
 }
 
 async function measure() {
@@ -124,8 +136,11 @@ async function main() {
   let vpn = cached.vpn || null
   let tunnel = Storage.get<boolean>(TUNNEL_KEY, { shared: true }) === true
   try {
-    tunnel = await detectTunnel()
-    Storage.set(TUNNEL_KEY, tunnel, { shared: true })
+    const detected = await detectTunnel()
+    if (detected !== null) {
+      tunnel = detected
+      Storage.set(TUNNEL_KEY, tunnel, { shared: true })
+    }
     await warmUp()
     const result = await measure()
     if (tunnel) vpn = result
