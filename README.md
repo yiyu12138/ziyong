@@ -2,7 +2,7 @@ Scripting safari 翻译插件：https://raw.githubusercontent.com/yiyu12138/ziyo
 
 Scripting 订阅流量：https://raw.githubusercontent.com/yiyu12138/ziyong/main/dingyue/dingyue-1.3.scripting
 
-Scripting 网速：https://raw.githubusercontent.com/yiyu12138/ziyong/main/netspeed/netspeed-1.2.scripting
+Scripting 网速：https://raw.githubusercontent.com/yiyu12138/ziyong/main/netspeed/netspeed-1.3.scripting
 
 Loon AI 规则：https://raw.githubusercontent.com/yiyu12138/ziyong/main/loon/AI.lsr
 
