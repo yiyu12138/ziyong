@@ -7,3 +7,5 @@ Scripting 网速：https://raw.githubusercontent.com/yiyu12138/ziyong/main/netsp
 Loon AI 规则：https://raw.githubusercontent.com/yiyu12138/ziyong/main/loon/AI.lsr
 
 GitHub 翻译：https://raw.githubusercontent.com/yiyu12138/ziyong/main/github-translate/github-translate-1.2.scripting
+
+Loon Telegram 规则：https://raw.githubusercontent.com/yiyu12138/ziyong/main/loon/Telegram.lsr
