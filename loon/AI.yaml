@@ -1,4 +1,7 @@
+# AI 规则（Clash classical 格式，由 loon/AI.lsr 自动生成）
+# 用法：rule-providers 里 behavior: classical
 payload:
+  # Gemini
   - DOMAIN,ai.google.dev
   - DOMAIN,aida.googleapis.com
   - DOMAIN,aistudio.google.com
@@ -16,6 +19,9 @@ payload:
   - DOMAIN,proactivebackend-pa.googleapis.com
   - DOMAIN,robinfrontend-pa.googleapis.com
   - DOMAIN,webchannel-alkalimakersuite-pa.clients6.google.com
+  # GPT
+  - AND,((DOMAIN-KEYWORD,chatgpt-async-webps-prod-),(DOMAIN-SUFFIX,webpubsub.azure.com))
+  - AND,((DOMAIN-KEYWORD,openaicom-api-),(DOMAIN-SUFFIX,azurefd.net))
   - DOMAIN,chatgpt.livekit.cloud
   - DOMAIN,host.livekit.cloud
   - DOMAIN,openai.com.cdn.cloudflare.net
@@ -32,6 +38,7 @@ payload:
   - DOMAIN-SUFFIX,oaiusercontent.com
   - DOMAIN-SUFFIX,openai.com
   - DOMAIN-SUFFIX,sora.com
+  # Claude
   - DOMAIN-SUFFIX,anthropic.com
   - DOMAIN-SUFFIX,claude.ai
   - DOMAIN-SUFFIX,claude.com
@@ -49,11 +56,17 @@ payload:
   - DOMAIN-SUFFIX,statsigapi.net
   - IP-CIDR,160.79.104.0/23,no-resolve
   - IP-CIDR6,2607:6bc0::/48,no-resolve
+  - IP-ASN,399358,no-resolve
+  # Muse
   - DOMAIN-SUFFIX,muse.ai
+  # Manus
   - DOMAIN-SUFFIX,manus.im
   - DOMAIN-SUFFIX,manuscdn.com
+  # x.ai / Grok
   - DOMAIN-SUFFIX,x.ai
   - DOMAIN-SUFFIX,grok.com
+  - DOMAIN-KEYWORD,grokbot
+  # Cursor
   - DOMAIN-SUFFIX,cursor.com
   - DOMAIN-SUFFIX,cursor.sh
   - DOMAIN-SUFFIX,cursorapi.com
