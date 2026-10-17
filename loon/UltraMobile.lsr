@@ -1,3 +1,8 @@
 # Ultra Mobile
 DOMAIN-SUFFIX,ultramobile.com
+DOMAIN-SUFFIX,mintmobile.com
 DOMAIN-SUFFIX,versaconnects.io
+DOMAIN,sdk.iad-05.braze.com
+DOMAIN,mobile.launchdarkly.com
+DOMAIN,clientstream.launchdarkly.com
+DOMAIN,api.sprig.com
