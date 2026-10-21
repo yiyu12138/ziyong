@@ -1,3 +1,14 @@
+# ============================================================
+# 可莉广告过滤器（Egern 原生版）
+# 来源：kelee.one/Tool/Loon/Lpx/Remove_ads_by_keli.lpx（Loon 格式）
+# 转写：2026-10-22，逐条 1:1 映射为 Egern 原生语法
+#   [Rule]          -> rules（DOMAIN/DOMAIN-SUFFIX/IP-CIDR/URL-REGEX）
+#   request reject  -> url_rewrites 内置靶（reject/reject-200/reject-dict/reject-img）
+#   response 改写    -> body_rewrites（response_regex / response_jq）
+# 使用：Egern -> 模块 -> 添加
+#   https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/keli-ads-egern.yaml
+# 注意：需要用 Egern 内安装并信任 CA 证书（改写与 URL-REGEX 类规则依赖解密）
+# ============================================================
 name: 可莉广告过滤器（Egern 原生版）
 description: kelee Remove_ads_by_keli.lpx 的 Egern 原生转写；[Rule]→rules、reject 类改写→url_rewrites 内置靶、response 改写→body_rewrites。逐条 1:1 转换，无兼容层风险。
 author: kelee（原插件）/ 转 Egern
