@@ -64,12 +64,3 @@ https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/keli-ads-egern.yam
 - 使用前需在 Egern 中安装并信任 CA 证书（URL 改写依赖解密）
 - AdGuard/机型差异导致某条规则误伤时，可在模块内对该条目加 `disabled: true` 单独关闭
 
-## 3. DeepSeek 余额小组件
-
-**Raw 链接**
-
-```
-https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/deepseek/DeepSeek.yaml
-```
-
-- DeepSeek 余额与今日开销小组件，需在模块 env 中配置 `DEEPSEEK_API_KEY`
