@@ -1,0 +1,106 @@
+name: "Telegram 规则"
+description: "由 loon/Telegram.lsr 转换，可在模块设置里选择策略组"
+author: "yiyu12138"
+homepage: "https://github.com/yiyu12138/ziyong"
+icon: "arrow.triangle.branch"
+
+compat_arguments:
+  POLICY: "Proxy"
+
+compat_arguments_desc: |
+  POLICY：匹配到这些域名/IP 后走哪个策略。填代理服务器或策略组的名称，默认 Proxy。
+
+rules:
+  # Telegram
+  - domain_suffix:
+      match: "telegram.org"
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: "telegram.dog"
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: "telegram.me"
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: "telegram.space"
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: "t.me"
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: "telega.one"
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: "telegra.ph"
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: "telegraph.com"
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: "tdesktop.com"
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: "telesco.pe"
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: "tg.dev"
+      policy: {{{POLICY}}}
+  - domain_keyword:
+      match: "telegram"
+      policy: {{{POLICY}}}
+  - ip_cidr:
+      match: "91.108.56.0/22"
+      policy: {{{POLICY}}}
+      no_resolve: true
+  - ip_cidr:
+      match: "91.108.4.0/22"
+      policy: {{{POLICY}}}
+      no_resolve: true
+  - ip_cidr:
+      match: "91.108.8.0/22"
+      policy: {{{POLICY}}}
+      no_resolve: true
+  - ip_cidr:
+      match: "91.108.16.0/22"
+      policy: {{{POLICY}}}
+      no_resolve: true
+  - ip_cidr:
+      match: "91.108.12.0/22"
+      policy: {{{POLICY}}}
+      no_resolve: true
+  - ip_cidr:
+      match: "149.154.160.0/20"
+      policy: {{{POLICY}}}
+      no_resolve: true
+  - ip_cidr:
+      match: "91.105.192.0/23"
+      policy: {{{POLICY}}}
+      no_resolve: true
+  - ip_cidr:
+      match: "91.108.20.0/22"
+      policy: {{{POLICY}}}
+      no_resolve: true
+  - ip_cidr:
+      match: "185.76.151.0/24"
+      policy: {{{POLICY}}}
+      no_resolve: true
+  - ip_cidr6:
+      match: "2001:b28:f23d::/48"
+      policy: {{{POLICY}}}
+      no_resolve: true
+  - ip_cidr6:
+      match: "2001:b28:f23f::/48"
+      policy: {{{POLICY}}}
+      no_resolve: true
+  - ip_cidr6:
+      match: "2001:67c:4e8::/48"
+      policy: {{{POLICY}}}
+      no_resolve: true
+  - ip_cidr6:
+      match: "2001:b28:f23c::/48"
+      policy: {{{POLICY}}}
+      no_resolve: true
+  - ip_cidr6:
+      match: "2a0a:f280::/32"
+      policy: {{{POLICY}}}
+      no_resolve: true

@@ -64,3 +64,12 @@ https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/keli-ads-egern.yam
 - 使用前需在 Egern 中安装并信任 CA 证书（URL 改写依赖解密）
 - AdGuard/机型差异导致某条规则误伤时，可在模块内对该条目加 `disabled: true` 单独关闭
 
+
+## 分流规则（由 loon/*.lsr 转换）
+
+每条规则都是独立模块，导入后可在模块设置里用 `POLICY` 选择策略组（默认 `Proxy`）。
+
+- AI：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/rules/AI.yaml
+- Telegram：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/rules/Telegram.yaml
+- Linux.do：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/rules/LinuxDo.yaml
+- Ultra Mobile：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/rules/UltraMobile.yaml

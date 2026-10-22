@@ -1,0 +1,20 @@
+name: "LinuxDo 规则"
+description: "由 loon/LinuxDo.lsr 转换，可在模块设置里选择策略组"
+author: "yiyu12138"
+homepage: "https://github.com/yiyu12138/ziyong"
+icon: "arrow.triangle.branch"
+
+compat_arguments:
+  POLICY: "Proxy"
+
+compat_arguments_desc: |
+  POLICY：匹配到这些域名/IP 后走哪个策略。填代理服务器或策略组的名称，默认 Proxy。
+
+rules:
+  # Linux.do
+  - domain_suffix:
+      match: "linux.do"
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: "ldstatic.com"
+      policy: {{{POLICY}}}

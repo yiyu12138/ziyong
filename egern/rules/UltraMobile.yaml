@@ -1,0 +1,38 @@
+name: "UltraMobile 规则"
+description: "由 loon/UltraMobile.lsr 转换，可在模块设置里选择策略组"
+author: "yiyu12138"
+homepage: "https://github.com/yiyu12138/ziyong"
+icon: "arrow.triangle.branch"
+
+compat_arguments:
+  POLICY: "Proxy"
+
+compat_arguments_desc: |
+  POLICY：匹配到这些域名/IP 后走哪个策略。填代理服务器或策略组的名称，默认 Proxy。
+
+rules:
+  # Ultra Mobile
+  - domain:
+      match: "w3b-api.ultramobile.com"
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: "ultramobile.com"
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: "mintmobile.com"
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: "versaconnects.io"
+      policy: {{{POLICY}}}
+  - domain:
+      match: "sdk.iad-05.braze.com"
+      policy: {{{POLICY}}}
+  - domain:
+      match: "mobile.launchdarkly.com"
+      policy: {{{POLICY}}}
+  - domain:
+      match: "clientstream.launchdarkly.com"
+      policy: {{{POLICY}}}
+  - domain:
+      match: "api.sprig.com"
+      policy: {{{POLICY}}}
