@@ -1,4 +1,5 @@
 payload:
+  - DOMAIN,w3b-api.ultramobile.com
   - DOMAIN-SUFFIX,ultramobile.com
   - DOMAIN-SUFFIX,mintmobile.com
   - DOMAIN-SUFFIX,versaconnects.io
