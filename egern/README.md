@@ -73,3 +73,15 @@ https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/keli-ads-egern.yam
 - Telegram：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/rules/Telegram.yaml
 - Linux.do：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/rules/LinuxDo.yaml
 - Ultra Mobile：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/rules/UltraMobile.yaml
+
+## DeepSeek 余额面板
+
+```
+https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/deepseek/DeepSeek-Balance.sgmodule
+```
+
+- 面板显示 DeepSeek 开放平台的账户余额：总余额、充值余额、赠金余额、刷新时间
+- 安装后到模块「参数」里把 `APIKey` 换成平台 Key（`https://platform.deepseek.com/api_keys`）
+- 数据来自 `GET https://api.deepseek.com/user/balance`，Key 只存在本机模块参数里，不进仓库
+- 默认 600 秒刷新，点面板可手动刷新；`good` 绿色=正常，`alert` 黄色=无余额/不可用，`error` 红色=Key 无效或网络失败
+- 结构沿用 Surge 的 `[Panel]` + `[Script] generic`，参数用 Egern 的 `{{{APIKey}}}` 占位符（Surge 原版写的是 `%api_key%`，在 Egern 里不会被替换）
