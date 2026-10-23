@@ -1,0 +1,14 @@
+#!name=DeepSeek 余额
+#!desc=在 Egern / Surge 面板中显示 DeepSeek 开放平台账户余额（总余额 / 充值 / 赠金）。安装后到模块「参数」里填 APIKey。
+#!author=yiyu12138
+#!category=API 余额
+#!system=ios
+#!icon=https://raw.githubusercontent.com/deepseek-ai/DeepSeek-V3/main/assets/logo.png
+#!arguments=APIKey:sk-在这里填你的Key
+#!arguments-desc=1. 到 platform.deepseek.com/api_keys 新建并复制 API Key；\n2. 把模块参数里的 APIKey 换成真实 Key 并保存；\n3. 在 Egern 主页面板区域查看，点面板可手动刷新，默认 600 秒自动刷新。
+
+[Panel]
+DeepSeek余额 = title="DeepSeek 余额",content="加载中...",style=info,script-name=deepseek-balance,update-interval=600
+
+[Script]
+deepseek-balance = type=generic,timeout=20,script-path=https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/deepseek/deepseek-balance.js,argument={{{APIKey}}}
