@@ -85,3 +85,14 @@ https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/deepseek/DeepSeek-
 - 数据来自 `GET https://api.deepseek.com/user/balance`，Key 只存在本机模块参数里，不进仓库
 - 默认 600 秒刷新，点面板可手动刷新；`good` 绿色=正常，`alert` 黄色=无余额/不可用，`error` 红色=Key 无效或网络失败
 - 结构沿用 Surge 的 `[Panel]` + `[Script] generic`，参数用 Egern 的 `{{{APIKey}}}` 占位符（Surge 原版写的是 `%api_key%`，在 Egern 里不会被替换）
+
+## NodeSeek 每日签到
+
+**Raw 链接**
+
+```
+https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/nodeseek/NodeSeek.sgmodule
+```
+
+- 上游脚本：[Phowx/script](https://github.com/Phowx/script)（MIT，本仓库镜像 `egern/nodeseek/nodeseek.js`），模块按 Egern 参数占位符 `{{{ }}}` 转写
+- 用法：导入模块后，先在 Egern 开启 MITM 并信任 CA，登录并打开一次 www.nodeseek.com 抓取 pjwt Cookie，之后每天 9:10 自动签到（`RANDOM=true` 随机鸡腿，可在模块参数里改 cron 与 RANDOM）
