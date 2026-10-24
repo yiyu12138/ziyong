@@ -1,0 +1,12 @@
+#!name=NodeSeek 每日签到
+#!desc=NodeSeek 每日签到领取鸡腿。先登录并打开 www.nodeseek.com 抓取 Cookie（pjwt），再由 cron 自动签到。移植自 Phowx/script（Surge 版），适配 Egern 参数占位符。
+#!icon=https://www.nodeseek.com/favicon.ico
+#!arguments=SCRIPT_URL:https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/nodeseek/nodeseek.js&CRON:10 9 * * *&RANDOM:true
+#!arguments-desc=RANDOM=true 随机签到（鸡腿 1-10），false 固定签到（约 5 鸡腿）
+
+[Script]
+NodeSeek 抓包 = type=http-request, pattern=^https://www\.nodeseek\.com/.*$, requires-body=0, max-size=0, script-path={{{SCRIPT_URL}}}, timeout=10
+NodeSeek 签到 = type=cron, cronexp="{{{CRON}}}", script-path={{{SCRIPT_URL}}}, argument={{{RANDOM}}}, timeout=60
+
+[MITM]
+hostname = %APPEND% www.nodeseek.com
