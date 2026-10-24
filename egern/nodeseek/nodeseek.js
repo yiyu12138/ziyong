@@ -78,7 +78,14 @@ async function attend() {
   }
 
   const ua = $.getdata(UA_KEY) || UA_FALLBACK;
-  const randomArgument = typeof $argument !== "undefined" ? $argument : "";
+  const manualCookie = typeof $argument !== "undefined" ? String($argument) : "";
+  const manualMatch = manualCookie.match(/pjwt=[^;\s]+/);
+  if (manualMatch) {
+    // 模块参数里直接填了 Cookie（形如 "pjwt=xxx" 或完整 cookie 串），优先使用
+    $.setdata(manualCookie.includes(";") || manualCookie.trim() === manualMatch[0] ? manualCookie : manualMatch[0], CK_KEY);
+    $.log("[INFO] using cookie from module argument");
+  }
+  const randomArgument = manualMatch ? "true" : manualCookie;
   const random = readBoolValue(randomArgument, readBool(RANDOM_KEY, false)) ? "true" : "false";
   const relayUrl = normalizeRelayUrl($.getdata(RELAY_URL_KEY) || "");
   const relayKey = $.getdata(RELAY_KEY_KEY) || "";
