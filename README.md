@@ -16,4 +16,4 @@ Egern 可莉广告过滤器（原生版）：https://raw.githubusercontent.com/y
 
  Egern 模块详细说明：[egern/README.md](egern/README.md)
 
-Egern 分流规则（AI / Telegram / Linux.do / Ultra Mobile）：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/rules/AI.yaml
+Egern 分流规则（AI / Telegram / Linux.do / Ultra Mobile）、Binance、：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/rules/AI.yaml

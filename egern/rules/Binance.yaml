@@ -1,0 +1,58 @@
+name: "Binance 规则"
+description: "币安 App 与网页分流（整理自 rule.kelee.one/Loon/Binance.lsr，2025-09-18 版）"
+author: "kelee / yiyu12138"
+homepage: "https://github.com/yiyu12138/ziyong"
+icon: "bitcoinsign.circle"
+
+compat_arguments:
+  POLICY: "Proxy"
+
+compat_arguments_desc: |
+  POLICY：匹配后走哪个策略组，默认 Proxy。
+  appsflayer.com：lekelee 原规则带的域名，疑似 AppsFlyer 归因的仿冒域名（少个 p 前面的 s），
+  当前解析到马来西亚小机房，与币安无公开关联，被大量灰色 App 共用。如不想走代理，
+  删掉文件末尾那一条，或在该条目上加 disabled: true。
+
+rules:
+  # 币安主域名
+  - domain_suffix:
+      match: "binance.com"
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: "binance.me"
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: "binance.cloud"
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: "binancefuture.com"
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: "binancecnt.com"
+      policy: {{{POLICY}}}
+  # 静态资源 CDN
+  - domain_suffix:
+      match: "bnbstatic.com"
+      policy: {{{POLICY}}}
+  # 中文站备用域名
+  - domain_suffix:
+      match: "bnbzh.ac"
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: "bnappzh.co"
+      policy: {{{POLICY}}}
+  # 量化/交易 SDK
+  - domain_suffix:
+      match: "saasexch.com"
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: "saasexch.cc"
+      policy: {{{POLICY}}}
+  # 埋点与监控（bntrace 用 Amazon 证书托管，AS 未公开）
+  - domain_suffix:
+      match: "bntrace.com"
+      policy: {{{POLICY}}}
+  # 归因 SDK（存疑，见上方说明；不想要就删除本条）
+  - domain_suffix:
+      match: "appsflayer.com"
+      policy: {{{POLICY}}}

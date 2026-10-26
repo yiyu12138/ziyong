@@ -73,6 +73,7 @@ https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/keli-ads-egern.yam
 - Telegram：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/rules/Telegram.yaml
 - Linux.do：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/rules/LinuxDo.yaml
 - Ultra Mobile：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/rules/UltraMobile.yaml
+- Binance：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/rules/Binance.yaml
 
 ## DeepSeek 余额面板
 
