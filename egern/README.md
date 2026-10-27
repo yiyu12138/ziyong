@@ -97,3 +97,11 @@ https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/nodeseek/NodeSeek.
 
 - 上游脚本：[Phowx/script](https://github.com/Phowx/script)（MIT，本仓库镜像 `egern/nodeseek/nodeseek.js`），模块按 Egern 参数占位符 `{{{ }}}` 转写
 - 用法：导入模块后，先在 Egern 开启 MITM 并信任 CA，登录并打开一次 www.nodeseek.com 抓取 pjwt Cookie，之后每天 9:10 自动签到（`RANDOM=true` 随机鸡腿，可在模块参数里改 cron 与 RANDOM）
+
+## 3. 番茄小说去广告
+
+- 地址：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/dragonread-adblock.yaml
+- 移植自 kelee 的 Loon 插件 DragonRead_remove_ads.lpx（2025-05-13 版）
+- 47 条 REJECT 规则：开屏/章末/听书广告域名、穿山甲 Pangle SDK、埋点上报（snssdk/pstatp/bytedance）
+- 全部为网络层拦截，不需要 MITM，也不需要配置证书
+- 注意：其中 bytescm.com（字节前端 CDN）一条在原版中标记为「误杀」，若影响正文加载，在该条 policy 旁加 disabled: true
