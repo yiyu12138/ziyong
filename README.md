@@ -4,7 +4,6 @@ Scripting 订阅流量：https://raw.githubusercontent.com/yiyu12138/ziyong/main
 
 Scripting 网速：https://raw.githubusercontent.com/yiyu12138/ziyong/main/netspeed/netspeed-1.4.scripting
 
-Loon AI 规则：https://raw.githubusercontent.com/yiyu12138/ziyong/main/loon/AI.lsr
 
 GitHub 翻译：https://raw.githubusercontent.com/yiyu12138/ziyong/main/github-translate/github-translate-1.2.scripting
 
@@ -16,7 +15,7 @@ Egern 可莉广告过滤器（原生版）：https://raw.githubusercontent.com/y
 
  Egern 模块详细说明：[egern/README.md](egern/README.md)
 
-Egern 分流规则（AI / Telegram / Linux.do / Ultra Mobile）、Binance、：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/rules/AI.yaml
 
 Egern 番茄小说去广告：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/dragonread-adblock.yaml
 
+Egern 分流规则：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/rules/Telegram.yaml

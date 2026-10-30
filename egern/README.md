@@ -69,7 +69,6 @@ https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/keli-ads-egern.yam
 
 每条规则都是独立模块，导入后可在模块设置里用 `POLICY` 选择策略组（默认 `Proxy`）。
 
-- AI：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/rules/AI.yaml
 - Telegram：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/rules/Telegram.yaml
 - Linux.do：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/rules/LinuxDo.yaml
 - Ultra Mobile：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/rules/UltraMobile.yaml
