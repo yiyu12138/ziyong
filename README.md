@@ -20,4 +20,3 @@ Egern 分流规则（AI / Telegram / Linux.do / Ultra Mobile）、Binance、：h
 
 Egern 番茄小说去广告：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/dragonread-adblock.yaml
 
-Egern YouTube 去广告（规则版）：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/youtube-adblock.yaml
