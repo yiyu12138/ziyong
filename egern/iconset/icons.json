@@ -1,18 +1,14 @@
 {
   "name": "ziyong icons",
-  "description": "自用图标集：2 张图 / 3 个名称",
+  "description": "自用图标集：2 张图 / 2 个名称",
   "icons": [
     {
-      "name": "ChatGPT",
-      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/ChatGPT~OpenAI.png?v=e9dd2797"
+      "name": "ASH",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/ASH.png?v=f5cd5c7a"
     },
     {
-      "name": "OpenAI",
-      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/ChatGPT~OpenAI.png?v=e9dd2797"
-    },
-    {
-      "name": "Claude",
-      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Claude.png?v=e9dd2797"
+      "name": "吹雪",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E5%90%B9%E9%9B%AA.png?v=ba5cc9de"
     }
   ]
 }
