@@ -19,3 +19,5 @@ Egern 可莉广告过滤器（原生版）：https://raw.githubusercontent.com/y
 Egern 番茄小说去广告：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/dragonread-adblock.yaml
 
 Egern 分流规则：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/rules/Telegram.yaml
+
+Egern 图标集订阅：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/icons.json
