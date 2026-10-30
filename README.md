@@ -19,3 +19,5 @@ Egern 可莉广告过滤器（原生版）：https://raw.githubusercontent.com/y
 Egern 分流规则（AI / Telegram / Linux.do / Ultra Mobile）、Binance、：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/rules/AI.yaml
 
 Egern 番茄小说去广告：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/dragonread-adblock.yaml
+
+Egern YouTube 去广告（规则版）：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/youtube-adblock.yaml
