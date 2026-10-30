@@ -1,0 +1,18 @@
+{
+  "name": "ziyong icons",
+  "description": "自用图标集：2 张图 / 3 个名称",
+  "icons": [
+    {
+      "name": "ChatGPT",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/ChatGPT~OpenAI.png?v=e9dd2797"
+    },
+    {
+      "name": "OpenAI",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/ChatGPT~OpenAI.png?v=e9dd2797"
+    },
+    {
+      "name": "Claude",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Claude.png?v=e9dd2797"
+    }
+  ]
+}
