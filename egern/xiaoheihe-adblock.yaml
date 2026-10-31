@@ -1,0 +1,19 @@
+name: "小黑盒去广告"
+description: "移植自可莉 Loon 插件 XiaoHeiHe_remove_ads.lpx（2026-10-02 版）。拦截小黑盒广告配置接口，清理社区信息流广告卡片。 需要安装并信任 Egern 根证书。"
+author: "可莉🅥 · Egern 移植 yiyu12138"
+homepage: "https://github.com/yiyu12138/ziyong"
+icon: "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/XiaoHeiHe.png"
+open_url: "https://apps.apple.com/app/id1244505010"
+
+url_rewrites:
+  - match: "^https://api\\.xiaoheihe\\.cn/account/get_ads_info_v2"
+    location: "http://reject-dict/"
+
+body_rewrites:
+  - response_jq:
+      match: "^https://api\\.xiaoheihe\\.cn/bbs/app/feeds/news"
+      filter: '.result.links |= map(if .content_type == 27 then del(.title, .ad_pm, .img_gif, .idea_id, .ad_report, .label, .source, .intranet_only, .ad_cm, .content_type, .PROTOCOL, .img, .ad_ratio) else . end)'
+
+mitm:
+  hostnames:
+    - "api.xiaoheihe.cn"

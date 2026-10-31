@@ -1,0 +1,71 @@
+name: "淘宝去广告"
+description: "移植自可莉 Loon 插件 Taobao_remove_ads.lpx（2026-10-02 版）。拦截淘宝开屏广告与导购推荐接口（含开屏视频/图片位改写）。 需要安装并信任 Egern 根证书。"
+author: "RuCu6 · Egern 移植 yiyu12138"
+homepage: "https://github.com/yiyu12138/ziyong"
+icon: "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Taobao.png"
+open_url: "https://apps.apple.com/app/id387682726"
+
+rules:
+  - domain:
+      match: "adashx.m.taobao.com"
+      policy: REJECT
+  - domain:
+      match: "ossgw.alicdn.com"
+      policy: REJECT
+  - domain:
+      match: "ems.youku.com"
+      policy: REJECT
+  - domain:
+      match: "hudong.alicdn.com"
+      policy: REJECT
+  - domain:
+      match: "h-adashx.ut.taobao.com"
+      policy: REJECT
+  - domain:
+      match: "ut.taobao.com"
+      policy: REJECT
+
+url_rewrites:
+  - match: "^https://acs\\.m\\.taobao\\.com/gw/mtop\\.fliggy\\.crm\\.screen\\.(allresource|predict)"
+    location: "http://reject-dict/"
+  - match: "^https://acs\\.m\\.taobao\\.com/gw/mtop\\.alibaba\\.advertisementservice\\.getadv"
+    location: "http://reject-dict/"
+  - match: "^https://acs\\.m\\.taobao\\.com/gw/mtop\\.alimama\\.etao\\.config\\.query/.+?etao_advertise"
+    location: "http://reject-dict/"
+  - match: "^https://acs\\.m\\.taobao\\.com/gw/mtop\\.alimusic\\.common\\.mobileservice\\.startinit"
+    location: "http://reject-dict/"
+  - match: "^https://acs\\.m\\.taobao\\.com/gw/mtop\\.etao\\.noah\\.query/.+tao_splash"
+    location: "http://reject-dict/"
+  - match: "^https://acs\\.m\\.taobao\\.com/gw/mtop\\.film\\.mtopadvertiseapi\\.queryadvertise"
+    location: "http://reject-dict/"
+  - match: "^https://acs\\.m\\.taobao\\.com/gw/mtop\\.o2o\\.ad\\.gateway\\.get"
+    location: "http://reject-dict/"
+  - match: "^https://acs\\.m\\.taobao\\.com/gw/mtop\\.taobao\\.idle\\.home\\.welcome"
+    location: "http://reject-dict/"
+  - match: "^https://acs\\.m\\.taobao\\.com/gw/mtop\\.trip\\.activity\\.querytmsresources"
+    location: "http://reject-dict/"
+  - match: "^https://(?:gw|heic)\\.alicdn\\.com/imgextra/i\\d/\\d*/?[\\w!]+-\\d-(?:octopus|tps)-(?:1080|1125)-\\d{4}\\.(?:jpg|png)_(?:1\\d{3}|9\\d{2})x(?:\\d|1\\d{3}|9\\d{2})q[59]0"
+    location: "http://reject-dict/"
+  - match: "^https://guide-acs\\.m\\.taobao\\.com/gw/mtop\\.taobao\\.(volvo\\.secondfloor\\.getconfig|wireless\\.home\\.newface\\.awesome\\.get)"
+    location: "http://reject-dict/"
+
+scriptings:
+  - http_response:
+      name: "淘宝开屏广告（视频/图片位）"
+      match: '^https://guide-acs\.m\.taobao\.com/gw/mtop\.taobao\.(cloudvideo\.video\.query|wireless\.home\.splash\.awesome\.get)'
+      script_url: "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/scripts/taobao/Taobao_remove_ads.js"
+      body_required: true
+      timeout: 10
+  - http_response:
+      name: "淘宝开屏弹层配置"
+      match: '^https://poplayer\.template\.alibaba\.com/\w+\.json'
+      script_url: "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/scripts/taobao/Taobao_remove_ads.js"
+      body_required: true
+      timeout: 10
+
+mitm:
+  hostnames:
+    - "acs.m.taobao.com"
+    - "heic.alicdn.com"
+    - "guide-acs.m.taobao.com"
+    - "poplayer.template.alibaba.com"

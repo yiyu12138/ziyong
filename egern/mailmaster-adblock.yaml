@@ -1,0 +1,27 @@
+name: "网易邮箱大师去广告"
+description: "移植自可莉 Loon 插件 MailMaster_remove_ads.lpx（2026-10-02 版）。去掉网易邮箱大师启动页广告、功能推广位与活动入口。 需要安装并信任 Egern 根证书。"
+author: "可莉🅥 · Egern 移植 yiyu12138"
+homepage: "https://github.com/yiyu12138/ziyong"
+icon: "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/MailMaster.png"
+open_url: "https://apps.apple.com/app/id897003024"
+
+url_rewrites:
+  - match: "^https://appconf\\.mail\\.163\\.com/mailmaster/api/http/urlConfig\\.do$"
+    location: "http://reject-dict/"
+  - match: "^https://dashi\\.163\\.com/task-center-api/fapi/task/list$"
+    location: "http://reject-dict/"
+  - match: "^https://appconf\\.mail\\.163\\.com/mailoperating/mailmaster/api/operator/get$"
+    location: "http://reject-dict/"
+
+body_rewrites:
+  - response_jq:
+      match: "^https://appconf\\.mail\\.163\\.com/mailmaster/api/page/v2/conf\\.do$"
+      filter: 'del(.data.functionOperatorInfoList, .data.memberOperator, .data.activityTabInfoList)'
+  - response_jq:
+      match: "^https://appconf\\.mail\\.163\\.com/mailmaster/api/config/function\\.do$"
+      filter: '.data.config[] |= if .result.tools then .result.tools |= map(select(.name == "邮件追踪" or .name == "替身邮箱")) else . end | del(.data.config[] | select(.functionName == "Function-AD"))'
+
+mitm:
+  hostnames:
+    - "appconf.mail.163.com"
+    - "dashi.163.com"

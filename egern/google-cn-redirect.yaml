@@ -1,0 +1,17 @@
+name: "Google搜索重定向"
+description: "移植自可莉 Loon 插件 Google.lpx（2026-10-02 版）。把 google.cn / ditu.google.cn 重定向到国际版 Google / Google 地图。 需要安装并信任 Egern 根证书。"
+author: "可莉🅥 · Egern 移植 yiyu12138"
+homepage: "https://github.com/yiyu12138/ziyong"
+icon: "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Google.png"
+
+url_rewrites:
+  - match: "^https?://(www.)?(g|google)\\.cn"
+    location: "https://www.google.com"
+    status_code: 307
+  - match: "^https?://(ditu|maps).google\\.cn"
+    location: "https://maps.google.com"
+    status_code: 307
+
+mitm:
+  hostnames:
+    - "www.google.cn"
