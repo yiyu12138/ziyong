@@ -1,0 +1,6 @@
+data/
+cache/
+.env
+build.log
+__pycache__/
+*.pyc

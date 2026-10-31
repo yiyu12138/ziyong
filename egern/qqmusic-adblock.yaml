@@ -1,0 +1,41 @@
+name: "QQ音乐去广告"
+description: "移植自可莉 Loon 插件 QQMusic_remove_ads.lpx（2026-10-02 版）。规则层直连拦截 QQ 音乐广告/统计域名。"
+author: "可莉🅥 · Egern 移植 yiyu12138"
+homepage: "https://github.com/yiyu12138/ziyong"
+icon: "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/QQMusic.png"
+open_url: "https://apps.apple.com/app/id414603431"
+
+rules:
+  - domain:
+      match: "adstats.tencentmusic.com"
+      policy: REJECT
+  - domain:
+      match: "ad.tencentmusic.com"
+      policy: REJECT
+  - domain:
+      match: "adcdn.tencentmusic.com"
+      policy: REJECT
+  - domain:
+      match: "adcdn6.tencentmusic.com"
+      policy: REJECT
+  - domain:
+      match: "adexpo.tencentmusic.com"
+      policy: REJECT
+  - domain:
+      match: "adclick.tencentmusic.com"
+      policy: REJECT
+  - domain:
+      match: "mc.tencentmusic.com"
+      policy: REJECT
+  - domain:
+      match: "monitor.music.qq.com"
+      policy: REJECT
+  - domain:
+      match: "tmead.y.qq.com"
+      policy: REJECT
+  - domain:
+      match: "tmeadbak.y.qq.com"
+      policy: REJECT
+  - domain:
+      match: "tmeadquic.y.qq.com"
+      policy: REJECT

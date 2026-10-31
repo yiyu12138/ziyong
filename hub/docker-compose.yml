@@ -1,0 +1,21 @@
+services:
+  egern-hub:
+    build: .
+    container_name: egern-hub
+    restart: always
+    ports:
+      - "8788:8788"
+    volumes:
+      - ./data:/app/data
+      - ./cache:/tmp/hub-src
+    environment:
+      - TZ=Asia/Shanghai
+      - HTTP_PROXY=http://172.17.0.1:7890
+      - HTTPS_PROXY=http://172.17.0.1:7890
+      - NO_PROXY=localhost,127.0.0.1,192.168.0.0/16,172.17.0.0/16
+      - ADMIN_TOKEN=${ADMIN_TOKEN:-}
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
