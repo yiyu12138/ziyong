@@ -86,9 +86,11 @@ function renderList() {
   if (!state.list.length) {
     const empty = (!state.q && !state.tag && state.group === '全部' && !(state.meta && state.meta.total))
       ? '还没有插件，点右上角 ＋ 添加'
-      : (state.group !== '全部'
-        ? '这个分类还没有条目，去设置里给分类绑个目录再点扫描'
-        : '没找到，换个词试试');
+      : (state.onlyFav
+        ? '还没有收藏，点卡片右上角的星标收藏一下'
+        : (state.group !== '全部'
+          ? '这个分类还没有条目，去设置里给分类绑个目录再点扫描'
+          : '没找到，换个词试试'));
     el.innerHTML = `<div class="empty">${empty}</div>`;
     return;
   }

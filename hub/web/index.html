@@ -177,6 +177,31 @@ select#f-group{width:100%;font-size:15px}
   <div class="sh"><h3 id="viewTitle">预览</h3><button class="x" id="viewClose">关闭</button></div>
   <div class="bd"><pre class="code" id="viewBody"></pre></div>
 </div>
+<div class="mask" id="mask3"></div>
+<div class="sheet" id="setSheet">
+  <div class="sh"><h3>设置</h3><button class="x" id="setClose">完成</button></div>
+  <div class="bd">
+    <p class="section">分类</p>
+    <div id="catList"></div>
+    <button class="ghost" id="catAdd" style="width:100%;margin-top:10px">＋ 新增分类</button>
+    <p class="arg-note" style="margin-top:14px">分类绑定仓库目录后，点「扫描」会把该目录里新增的文件自动收进来；文件里的 name / description 会被读取。</p>
+
+    <p class="section" style="margin-top:22px">数据</p>
+    <div class="cat">
+      <div class="cr">
+        <div style="min-width:0">
+          <div class="cn">备份</div>
+          <div class="cd">每天自动留一份，保留 7 天</div>
+        </div>
+        <div class="cb">
+          <button class="mini" id="exportBtn">导出</button>
+          <button class="mini" id="importBtn">导入</button>
+        </div>
+      </div>
+      <input type="file" id="importFile" accept="application/json,.json" hidden>
+    </div>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 <script src="app.js"></script>
 <script>
