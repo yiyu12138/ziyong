@@ -1,5 +1,7 @@
 import asyncio
 import datetime
+import shutil
+import subprocess
 import json
 import os
 import re
@@ -10,7 +12,7 @@ from fastapi import Body, FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 
-from . import db, sync as upstream
+from . import db, backup
 
 WEB_DIR = os.environ.get("WEB_DIR", "/app/web")
 CUSTOM_DIR = os.environ.get("CUSTOM_DIR", "/app/data/custom")
@@ -20,9 +22,9 @@ GH_BRANCH = os.environ.get("SOURCE_BRANCH", "main")
 GH_RAW = f"https://raw.githubusercontent.com/{GH_REPO}/{GH_BRANCH}/"
 GH_API = f"https://api.github.com/repos/{GH_REPO}/contents/"
 CONFIG_EXT = (".yaml", ".yml", ".sgmodule", ".json", ".list", ".conf")
+SRC_DIR = os.environ.get("SRC_DIR", "/tmp/hub-src")
 ADMIN_TOKEN = os.environ.get("ADMIN_TOKEN", "")
 SYNC_AT = os.environ.get("SYNC_AT", "04:17")
-SYNC_ENABLED = os.environ.get("SYNC_ENABLED", "0") == "1"
 
 app = FastAPI(title="Egern 插件库")
 
@@ -45,7 +47,7 @@ def row_to_dict(r):
         "installed": bool(r["installed"]), "unread": bool(r["unread"]),
         "updated_at": r["updated_at"], "norm_key": r["norm_key"],
         "args": json.loads(r["args"]) if r["args"] else [],
-        "kind": r["kind"] or "module",
+        "kind": r["kind"] or "module", "icon": r["icon"] or "", "pinyin": r["pinyin"] or "",
     }
 
 
@@ -61,7 +63,7 @@ def parse_meta(text):
                 k, v = body.split("=", 1)
                 meta.setdefault(k.strip(), v.strip())
         return meta
-    for key in ("name", "description", "desc", "author", "homepage"):
+    for key in ("name", "description", "desc", "author", "homepage", "icon"):
         m = re.search(rf"^{key}\s*:\s*['\"]?(.+?)['\"]?\s*$", text, re.M)
         if m:
             meta[key] = m.group(1).strip()
@@ -74,27 +76,36 @@ def parse_meta(text):
 @app.on_event("startup")
 async def startup():
     db.init()
-    if SYNC_ENABLED:
-        if db.get_setting("last_sync") is None:
-            try:
-                await asyncio.to_thread(upstream.sync)
-            except Exception as e:  # 首次失败不影响页面
-                print("首次同步失败:", e)
-        asyncio.create_task(scheduler())
+    asyncio.create_task(daily_backup())
+    asyncio.create_task(asyncio.to_thread(backfill))
+    asyncio.create_task(daily_scan())
 
 
-async def scheduler():
+def backfill():
+    """老数据补拼音和图标。"""
+    with db.conn() as c:
+        rows = c.execute("SELECT id,name,icon,source_path,module_url,pinyin FROM plugins").fetchall()
+        for r in rows:
+            py = r["pinyin"] or db.pinyin_key(r["name"])
+            icon = r["icon"] or ""
+            rel = r["source_path"] or ""
+            if not rel and (r["module_url"] or "").startswith(GH_RAW):
+                rel = urllib.parse.unquote(r["module_url"][len(GH_RAW):])
+            if not icon and rel:
+                local = os.path.join(SRC_DIR, rel)
+                if os.path.exists(local):
+                    icon = parse_meta(open(local, encoding="utf-8", errors="ignore").read()).get("icon", "")
+            if py != (r["pinyin"] or "") or icon != (r["icon"] or ""):
+                c.execute("UPDATE plugins SET pinyin=?, icon=? WHERE id=?", (py, icon, r["id"]))
+
+
+async def daily_backup():
     while True:
-        now = datetime.datetime.now()
-        target = now.replace(hour=int(SYNC_AT.split(":")[0]),
-                             minute=int(SYNC_AT.split(":")[1]), second=0, microsecond=0)
-        if target <= now:
-            target += datetime.timedelta(days=1)
-        await asyncio.sleep((target - now).total_seconds())
         try:
-            await asyncio.to_thread(upstream.sync)
+            await asyncio.to_thread(backup.run)
         except Exception as e:
-            print("定时同步失败:", e)
+            print("备份失败:", e)
+        await asyncio.sleep(3600)
 
 
 # ---------- 读接口 ----------
@@ -143,29 +154,29 @@ def build_groups(rows):
 def bootstrap():
     with db.conn() as c:
         rows = c.execute("SELECT * FROM plugins").fetchall()
-    groups = build_groups(rows)
-    counts = {"全部": len(groups), "自建": 0, "正式版": 0, "Official": 0, "Beta": 0}
+        cat_names = [r["name"] for r in c.execute("SELECT name FROM categories ORDER BY sort, name")]
+    groups_data = build_groups(rows)
+    counts = {"全部": len(groups_data)}
     tags = {}
-    for g in groups:
+    for g in groups_data:
         seen = set()
         for v in g["variants"]:
-            counts[v["group"]] = counts.get(v["group"], 0) + (0 if v["group"] in seen else 1)
-            seen.add(v["group"])
+            if v["group"] not in seen:
+                counts[v["group"]] = counts.get(v["group"], 0) + 1
+                seen.add(v["group"])
             for t in (v["tags"] or "").split(","):
                 t = t.strip()
                 if t and t not in seen:
                     tags[t] = tags.get(t, 0) + 1
-    total = len(groups)
-    unread = sum(1 for g in groups if g["unread"])
-    order = ["全部"] + sorted([k for k in counts if k != "全部" and counts[k]],
-                              key=lambda k: (-counts[k], k))
+    order = ["全部"] + cat_names + sorted(k for k in counts if k != "全部" and k not in cat_names)
     return {
-        "total": total, "unread": unread,
+        "total": len(groups_data),
+        "unread": sum(1 for g in groups_data if g["unread"]),
         "groups": [{"key": k, "count": counts.get(k, 0)} for k in order],
         "tags": sorted([{"tag": k, "count": v} for k, v in tags.items()], key=lambda x: -x["count"]),
         "last_sync": db.get_setting("last_sync"),
         "admin": bool(ADMIN_TOKEN),
-        "sync_enabled": SYNC_ENABLED,
+        "sync_enabled": False,
     }
 
 
@@ -184,7 +195,8 @@ def list_plugins(group: str = "全部", tag: str = "", q: str = "", only_fav: in
         if tag and not any(tag == t.strip() for v in g["variants"] for t in (v["tags"] or "").split(",")):
             continue
         if kw:
-            hay = " ".join([v["name"] + " " + v["desc"] + " " + v["author"] for v in g["variants"]]).lower()
+            hay = " ".join(v["name"] + " " + v["desc"] + " " + v["author"] + " " + (v.get("pinyin") or "")
+                             for v in g["variants"]).lower()
             if kw not in hay:
                 continue
         out.append(g)
@@ -211,12 +223,12 @@ async def create_plugin(request: Request, payload: dict = Body(...)):
     with db.conn() as c:
         try:
             c.execute("""INSERT INTO plugins
-              (name,description,author,author_url,repo_url,module_url,grp,tags,norm_key,is_self,unread)
-              VALUES (?,?,?,?,?,?,?,?,?,1,0)""",
+              (name,description,author,author_url,repo_url,module_url,grp,tags,norm_key,icon,pinyin,is_self,unread)
+              VALUES (?,?,?,?,?,?,?,?,?,?,?,1,0)""",
                       (name, payload.get("desc", ""), payload.get("author", ""),
                        payload.get("author_url", ""), payload.get("repo_url", ""), url,
                        (payload.get("group") or "自用").strip(), payload.get("tags", ""),
-                       db.norm_key(name)))
+                       db.norm_key(name), payload.get("icon", ""), db.pinyin_key(name)))
             pid = c.execute("SELECT last_insert_rowid() id").fetchone()["id"]
         except Exception:
             raise HTTPException(400, "这个模块地址已经收录过了")
@@ -240,6 +252,8 @@ async def update_plugin(request: Request, pid: int, payload: dict = Body(...)):
                    payload.get("repo_url", r["repo_url"]), payload.get("url", r["module_url"]),
                    payload.get("group", r["grp"]),
                    db.norm_key(payload.get("name", r["name"])), pid))
+        c.execute("UPDATE plugins SET pinyin=? WHERE id=?",
+                  (db.pinyin_key(payload.get("name", r["name"])), pid))
     return {"ok": True}
 
 
@@ -272,74 +286,6 @@ def mark_installed(pid: int):
     with db.conn() as c:
         c.execute("UPDATE plugins SET installed=1, unread=0 WHERE id=?", (pid,))
     return {"ok": True}
-
-
-@app.post("/api/plugins/{pid}/read")
-def mark_read(pid: int):
-    with db.conn() as c:
-        c.execute("UPDATE plugins SET unread=0 WHERE id=?", (pid,))
-    return {"ok": True}
-
-
-@app.post("/api/sync")
-async def do_sync(request: Request):
-    require_admin(request)
-    if not SYNC_ENABLED:
-        raise HTTPException(400, "上游同步已关闭，插件由你手动维护")
-    try:
-        return await asyncio.to_thread(upstream.sync)
-    except Exception as e:
-        raise HTTPException(500, f"同步失败：{e}")
-
-
-def _read_module_text(row):
-    sp = row["source_path"] or ""
-    if sp:
-        local = os.path.join(CLONE_DIR, sp)
-        if os.path.exists(local):
-            return open(local, encoding="utf-8", errors="ignore").read()
-    req = urllib.request.Request(row["module_url"], headers={"User-Agent": "egern-hub/1.0"})
-    return urllib.request.urlopen(req, timeout=20).read().decode("utf-8", "ignore")
-
-
-@app.get("/api/plugins/{pid}/args")
-def plugin_args(pid: int):
-    with db.conn() as c:
-        r = c.execute("SELECT * FROM plugins WHERE id=?", (pid,)).fetchone()
-    if not r:
-        raise HTTPException(404)
-    return {"name": r["name"], "url": r["module_url"],
-            "args": json.loads(r["args"]) if r["args"] else []}
-
-
-@app.post("/api/plugins/{pid}/customize")
-def customize_plugin(request: Request, pid: int, payload: dict = Body(...)):
-    require_admin(request)
-    values = payload.get("values") or {}
-    with db.conn() as c:
-        r = c.execute("SELECT * FROM plugins WHERE id=?", (pid,)).fetchone()
-    if not r:
-        raise HTTPException(404)
-    try:
-        text = _read_module_text(r)
-    except Exception as e:
-        raise HTTPException(400, f"读取模块失败：{e}")
-
-    defined = [a["k"] for a in (json.loads(r["args"]) if r["args"] else [])]
-    for k in defined:
-        if k in values:
-            text = re.sub(r"\{\{\{\s*" + re.escape(k) + r"\s*\}\}\}", str(values[k]), text)
-    # 参数已固化，去掉声明行
-    text = re.sub(r"^#!arguments=.*\n", "", text, flags=re.M)
-    text = re.sub(r"^#!arguments-desc=.*\n", "", text, flags=re.M)
-    text = text.replace("{;}", ",")
-
-    os.makedirs(CUSTOM_DIR, exist_ok=True)
-    digest = __import__("hashlib").sha1(text.encode("utf-8")).hexdigest()[:16]
-    fname = f"{r['id']}-{digest}.sgmodule"
-    with open(os.path.join(CUSTOM_DIR, fname), "w", encoding="utf-8") as f:
-        f.write(text)
-    return {"url": "/custom/" + fname, "name": r["name"]}
 
 
 @app.post("/api/fetch-meta")
@@ -421,65 +367,126 @@ def delete_category(request: Request, name: str):
 
 
 # ---------- 从仓库目录导入 ----------
-def _gh_list(path):
-    url = GH_API + urllib.parse.quote(path) + "?ref=" + GH_BRANCH
-    req = urllib.request.Request(url, headers={
-        "User-Agent": "egern-hub/1.0", "Accept": "application/vnd.github+json"})
-    return json.loads(urllib.request.urlopen(req, timeout=25).read())
+def _ensure_src():
+    """把源仓库浅克隆到本地，比逐目录请求 GitHub API 稳，也不受 60 次/小时限制。"""
+    token = os.environ.get("GH_TOKEN", "")
+    url = f"https://github.com/{GH_REPO}.git"
+    if token:
+        url = f"https://x-access-token:{token}@github.com/{GH_REPO}.git"
+    if os.path.isdir(os.path.join(SRC_DIR, ".git")):
+        r = subprocess.run(["git", "-C", SRC_DIR, "remote", "get-url", "origin"],
+                           capture_output=True, text=True)
+        if GH_REPO not in (r.stdout or ""):
+            shutil.rmtree(SRC_DIR, ignore_errors=True)
+    if os.path.isdir(os.path.join(SRC_DIR, ".git")):
+        subprocess.run(["git", "-C", SRC_DIR, "fetch", "--depth", "1", "origin", GH_BRANCH],
+                       check=True, capture_output=True, timeout=180)
+        subprocess.run(["git", "-C", SRC_DIR, "reset", "--hard", f"origin/{GH_BRANCH}"],
+                       check=True, capture_output=True, timeout=180)
+    else:
+        shutil.rmtree(SRC_DIR, ignore_errors=True)
+        subprocess.run(["git", "clone", "--depth", "1", "--branch", GH_BRANCH, url, SRC_DIR],
+                       check=True, capture_output=True, timeout=300)
 
 
-def _walk_repo(path, depth=0, skip=()):
-    if depth > 3:
-        return
-    for item in _gh_list(path):
-        if item["type"] == "dir":
-            if "/images" in "/" + item["path"] or item["name"].startswith("."):
-                continue
-            if any(sk in "/" + item["path"] + "/" for sk in skip):
-                continue
-            yield from _walk_repo(item["path"], depth + 1, skip)
-        elif item["type"] == "file" and item["name"].lower().endswith(CONFIG_EXT):
-            yield item["path"]
+def _walk_local(rel_dir, skip=()):
+    base = os.path.join(SRC_DIR, rel_dir)
+    out = []
+    for dirpath, dirnames, filenames in os.walk(base):
+        rel = os.path.relpath(dirpath, SRC_DIR).replace(os.sep, "/")
+        if any(sk.strip("/") in rel.split("/") for sk in skip):
+            dirnames[:] = []
+            continue
+        dirnames[:] = [d for d in dirnames if not d.startswith(".") and d != "images"]
+        for fn in filenames:
+            if fn.lower().endswith(CONFIG_EXT):
+                out.append(rel + "/" + fn if rel != "." else fn)
+    return sorted(out)
 
 
-@app.post("/api/categories/{name}/scan")
-async def scan_category(request: Request, name: str):
-    require_admin(request)
+def _scan_category(name):
     with db.conn() as c:
         cat = c.execute("SELECT * FROM categories WHERE name=?", (name,)).fetchone()
     if not cat:
         raise HTTPException(404, "分类不存在")
     if not cat["dir"]:
         raise HTTPException(400, "这个分类还没绑定仓库目录")
+    _ensure_src()
+    skip = ("rules", "iconset") if cat["kind"] == "module" else ()
+    files = _walk_local(cat["dir"].strip("/"), skip)
+    added, skipped, failed = 0, 0, []
+    with db.conn() as c:
+        for f in files:
+            url = GH_RAW + urllib.parse.quote(f)
+            if c.execute("SELECT 1 FROM plugins WHERE module_url=?", (url,)).fetchone():
+                skipped += 1
+                continue
+            try:
+                with open(os.path.join(SRC_DIR, f), encoding="utf-8", errors="ignore") as fh:
+                    text = fh.read()
+            except Exception as e:
+                failed.append(f"{f}: {e}")
+                continue
+            meta = parse_meta(text)
+            nm = meta.get("name") or f.rsplit("/", 1)[-1].rsplit(".", 1)[0]
+            desc = meta.get("desc") or meta.get("description") or ""
+            c.execute("""INSERT INTO plugins(name,description,author,author_url,repo_url,
+                         module_url,grp,tags,norm_key,kind,icon,pinyin,source_path,is_self)
+                         VALUES(?,?,?,?,?,?,?,'',?,?,?,?,?,1)""",
+                      (nm, desc, meta.get("author", ""), "", "", url, name,
+                       db.norm_key(nm), cat["kind"], meta.get("icon", ""),
+                       db.pinyin_key(nm), f))
+            added += 1
+    return {"added": added, "skipped": skipped, "failed": failed[:5], "scanned": len(files)}
 
-    def work():
-        skip = ("/rules/", "/iconset/", "/node_modules/") if cat["kind"] == "module" else ()
-        files = list(_walk_repo(cat["dir"].strip("/"), 0, skip))
-        added, skipped, failed = 0, 0, []
-        with db.conn() as c:
-            for f in files:
-                url = GH_RAW + urllib.parse.quote(f)
-                if c.execute("SELECT 1 FROM plugins WHERE module_url=?", (url,)).fetchone():
-                    skipped += 1
-                    continue
+
+@app.post("/api/categories/{name}/scan")
+async def scan_category(request: Request, name: str):
+    require_admin(request)
+    return await asyncio.to_thread(_scan_category, name)
+
+
+async def daily_scan():
+    while True:
+        now = datetime.datetime.now()
+        target = now.replace(hour=4, minute=30, second=0, microsecond=0)
+        if target <= now:
+            target += datetime.timedelta(days=1)
+        await asyncio.sleep((target - now).total_seconds())
+        try:
+            with db.conn() as c:
+                cats = [r["name"] for r in c.execute(
+                    "SELECT name FROM categories WHERE IFNULL(dir,'')<>'' ORDER BY sort")]
+            for n in cats:
                 try:
-                    req = urllib.request.Request(url, headers={"User-Agent": "egern-hub/1.0"})
-                    text = urllib.request.urlopen(req, timeout=20).read().decode("utf-8", "ignore")
+                    await asyncio.to_thread(_scan_category, n)
                 except Exception as e:
-                    failed.append(f"{f}: {e}")
-                    continue
-                meta = parse_meta(text)
-                nm = meta.get("name") or f.rsplit("/", 1)[-1].rsplit(".", 1)[0]
-                desc = meta.get("desc") or meta.get("description") or ""
-                c.execute("""INSERT INTO plugins(name,description,author,author_url,repo_url,
-                             module_url,grp,tags,norm_key,kind,is_self)
-                             VALUES(?,?,?,?,?,?,?,'',?,?,1)""",
-                          (nm, desc, meta.get("author", ""), "", "", url, name,
-                           db.norm_key(nm), cat["kind"]))
-                added += 1
-        return {"added": added, "skipped": skipped, "failed": failed[:5], "scanned": len(files)}
+                    print(f"自动扫描 {n} 失败:", e)
+        except Exception as e:
+            print("自动扫描失败:", e)
 
-    return await asyncio.to_thread(work)
+
+@app.get("/api/plugins/{pid}/content")
+def plugin_content(pid: int, lines: int = 120):
+    with db.conn() as c:
+        r = c.execute("SELECT * FROM plugins WHERE id=?", (pid,)).fetchone()
+    if not r:
+        raise HTTPException(404)
+    sp = r["source_path"] or ""
+    text = ""
+    if sp:
+        local = os.path.join(SRC_DIR, sp)
+        if os.path.exists(local):
+            text = open(local, encoding="utf-8", errors="ignore").read()
+    if not text:
+        try:
+            req = urllib.request.Request(r["module_url"], headers={"User-Agent": "egern-hub/1.0"})
+            text = urllib.request.urlopen(req, timeout=20).read().decode("utf-8", "ignore")
+        except Exception as e:
+            raise HTTPException(400, f"读取失败：{e}")
+    all_lines = text.splitlines()
+    return {"name": r["name"], "url": r["module_url"], "total": len(all_lines),
+            "text": "\n".join(all_lines[:lines]), "truncated": len(all_lines) > lines}
 
 
 @app.get("/api/export")

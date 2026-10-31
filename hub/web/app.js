@@ -1,4 +1,4 @@
-const state = { group: '全部', tag: '', q: '', list: [], meta: null, editing: null, sel: {}, sort: 'az' };
+const state = { group: '全部', tag: '', q: '', list: [], meta: null, editing: null, sel: {}, sort: 'az', onlyFav: false };
 const $ = s => document.querySelector(s);
 const esc = s => (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const GH = '<svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>';
@@ -43,9 +43,14 @@ function cardHtml(g) {
     ? `<div class="vers">${g.variants.map((x, i) =>
         `<button class="ver${i === (state.sel[g.key] || 0) ? ' on' : ''}" data-v="${i}">${esc(x.group)}</button>`).join('')}</div>`
     : '';
+  const iconUrl = /^https?:\/\//.test(v.icon || '') ? v.icon : '';
+  const icon = iconUrl
+    ? `<img class="app-icon" src="${esc(iconUrl)}" loading="lazy" onerror="this.replaceWith(document.createTextNode(''))">`
+    : `<span class="app-icon ph">${esc(v.name.slice(0, 1))}</span>`;
   return `<article class="card${v.installed ? ' done' : ''}" data-key="${esc(g.key)}">
     <div class="hd">
-      <h2>${esc(v.name)}</h2>
+      ${icon}
+      <h2 data-act="view" data-id="${v.id}">${esc(v.name)}</h2>
       ${g.unread ? '<span class="dot" title="已更新"></span>' : ''}
       <button class="star${v.favorite ? ' on' : ''}" data-act="fav" data-id="${v.id}">${v.favorite ? '★' : '☆'}</button>
     </div>
@@ -80,7 +85,10 @@ function renderList() {
   const el = $('#list');
   if (!state.list.length) {
     const empty = (!state.q && !state.tag && state.group === '全部' && !(state.meta && state.meta.total))
-      ? '还没有插件，点右上角 ＋ 添加' : '没找到，换个词试试';
+      ? '还没有插件，点右上角 ＋ 添加'
+      : (state.group !== '全部'
+        ? '这个分类还没有条目，去设置里给分类绑个目录再点扫描'
+        : '没找到，换个词试试');
     el.innerHTML = `<div class="empty">${empty}</div>`;
     return;
   }
@@ -115,7 +123,7 @@ async function loadMeta() {
 }
 
 async function loadList() {
-  const p = new URLSearchParams({ group: state.group, tag: state.tag, q: state.q });
+  const p = new URLSearchParams({ group: state.group, tag: state.tag, q: state.q, only_fav: state.onlyFav ? 1 : 0 });
   state.list = await api('/api/plugins?' + p.toString());
   renderList();
 }
@@ -151,7 +159,18 @@ $('#list').addEventListener('click', async e => {
   const act = e.target.closest('[data-act]');
   if (!act) return;
   const id = act.dataset.id;
-  let v0 = null;
+
+  if (act.dataset.act === 'view') {
+    e.preventDefault();
+    try {
+      const r = await api(`/api/plugins/${id}/content`);
+      $('#viewTitle').textContent = r.name + (r.truncated ? `（前 120 行 / 共 ${r.total} 行）` : '');
+      $('#viewBody').textContent = r.text;
+      $('#mask4').classList.add('on');
+      $('#viewSheet').classList.add('on');
+    } catch (err) { toast(err.message); }
+    return;
+  }
 
   if (act.dataset.act === 'fav') {
     e.preventDefault();
@@ -177,11 +196,6 @@ $('#list').addEventListener('click', async e => {
     openForm(g.variants.find(x => String(x.id) === id)); return;
   }
   if (act.dataset.act === 'use') {
-    if (v0 = g.variants.find(x => String(x.id) === id), v0 && (v0.args || []).length) {
-      e.preventDefault();
-      openArgs(g, v0);
-      return;
-    }
     api(`/api/plugins/${id}/installed`, { method: 'POST' }).then(() => {
       act.textContent = '已导入';
       card.classList.add('done');
@@ -292,64 +306,6 @@ $('#delBtn').addEventListener('click', async () => {
 loadCategories().then(renderGroupOptions).catch(() => {});
 refresh().catch(e => { $('#sub').textContent = '加载失败：' + e.message; });
 
-// ---- 参数自定义 ----
-let argTarget = null, argGroup = null;
-
-function openArgs(g, v) {
-  argTarget = v; argGroup = g;
-  const items = v.args || [];
-  const body = $('#argBody');
-  const parts = [`<p class="arg-note">${esc(v.name)} · 这些参数 Surge 会做成设置页，Egern 不认。改完点「应用并导入」，会生成一份改好参数的模块给你。</p>`];
-  items.forEach(a => {
-    if (a.v === '--' || !a.v) {
-      parts.push(`<div class="arg-title">${esc(a.k)}</div>`);
-      return;
-    }
-    parts.push(`<label class="arg-in"><span>${esc(a.k)}</span><input data-k="${esc(a.k)}" value="${esc(a.v)}" autocapitalize="off" autocorrect="off" spellcheck="false"></label>`);
-  });
-  if (items.length <= 1) parts.push('<p class="arg-note">这个模块没有可调项。</p>');
-  body.innerHTML = parts.join('');
-  $('#mask2').classList.add('on');
-  $('#argSheet').classList.add('on');
-  $('#argBar').classList.add('on');
-}
-
-function closeArgs() {
-  $('#mask2').classList.remove('on');
-  $('#argSheet').classList.remove('on');
-  $('#argBar').classList.remove('on');
-  argTarget = null;
-}
-
-function markUsed(id) {
-  api(`/api/plugins/${'$'}{id}/installed`, { method: 'POST' }).catch(() => {});
-}
-
-$('#argClose').addEventListener('click', closeArgs);
-$('#mask2').addEventListener('click', closeArgs);
-
-$('#argDefault').addEventListener('click', () => {
-  if (!argTarget) return;
-  const url = 'egern:/modules/new?name=' + encodeURIComponent(argTarget.name) + '&url=' + encodeURIComponent(argTarget.url);
-  api(`/api/plugins/${argTarget.id}/installed`, { method: 'POST' }).catch(() => {});
-  closeArgs();
-  window.location.href = url;
-});
-
-$('#argApply').addEventListener('click', async () => {
-  if (!argTarget) return;
-  const values = {};
-  document.querySelectorAll('#argBody input[data-k]').forEach(i => { values[i.dataset.k] = i.value; });
-  try {
-    const r = await api(`/api/plugins/${argTarget.id}/customize`, { method: 'POST', body: JSON.stringify({ values }) });
-    const abs = location.origin + r.url;
-    const url = 'egern:/modules/new?name=' + encodeURIComponent(r.name) + '&url=' + encodeURIComponent(abs);
-    api(`/api/plugins/${argTarget.id}/installed`, { method: 'POST' }).catch(() => {});
-    closeArgs();
-    window.location.href = url;
-  } catch (e) { toast(e.message); }
-});
-
 // ---- 设置：分类管理 ----
 let categories = [];
 
@@ -444,6 +400,12 @@ function renderGroupOptions() {
   if (cur && categories.some(c => c.name === cur)) sel.value = cur;
 }
 
+$('#favBtn').addEventListener('click', () => {
+  state.onlyFav = !state.onlyFav;
+  $('#favBtn').classList.toggle('on', state.onlyFav);
+  loadList().catch(e => toast(e.message));
+});
+
 $('#setBtn').addEventListener('click', async () => {
   try { await loadCategories(); } catch (e) { toast(e.message); }
   renderCats(); renderGroupOptions();
@@ -477,3 +439,42 @@ async function copyText(text) {
   ta.remove();
   return ok;
 }
+
+// ---- 导出 / 导入 ----
+document.getElementById('exportBtn').addEventListener('click', async () => {
+  try {
+    const rows = await api('/api/export');
+    const blob = new Blob([JSON.stringify(rows, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = '自用清单-' + new Date().toISOString().slice(0, 10) + '.json';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 3000);
+    toast(`已导出 ${rows.length} 条`);
+  } catch (e) { toast(e.message); }
+});
+
+document.getElementById('importBtn').addEventListener('click', () => {
+  document.getElementById('importFile').click();
+});
+
+document.getElementById('importFile').addEventListener('change', async e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  try {
+    const rows = JSON.parse(await f.text());
+    const r = await api('/api/import', { method: 'POST', body: JSON.stringify(rows) });
+    toast(`导入完成，新收录 ${r.imported} 条`);
+    await refresh();
+  } catch (err) { toast('导入失败：' + err.message); }
+  e.target.value = '';
+});
+
+$('#viewClose').addEventListener('click', () => {
+  $('#mask4').classList.remove('on');
+  $('#viewSheet').classList.remove('on');
+});
+$('#mask4').addEventListener('click', () => {
+  $('#mask4').classList.remove('on');
+  $('#viewSheet').classList.remove('on');
+});

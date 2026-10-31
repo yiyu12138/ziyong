@@ -4,6 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f6f6f8">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="自用">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%2312A150'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='white' font-family='-apple-system'%3E自%3C/text%3E%3C/svg%3E">
 <title>自用</title>
 <style>
@@ -21,6 +26,7 @@ h1{margin:0;font-size:25px;letter-spacing:-.7px;line-height:1.15}
 .ic{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:#fff;color:#3a3a40;font-size:17px;display:flex;align-items:center;justify-content:center;padding:0}
 .ic:active{background:#eee}
 .ic.spin{animation:sp 1s linear infinite}
+.ic.on{background:#FFF6E5;border-color:#F5C86B;color:#E09B12}
 @keyframes sp{to{transform:rotate(360deg)}}
 #q{width:100%;padding:10px 13px;border:1px solid var(--line);border-radius:11px;font-size:15px;background:#fff;outline:none;margin-top:11px;color:var(--ink)}
 #q:focus{border-color:var(--g);box-shadow:0 0 0 3px rgba(18,161,80,.10)}
@@ -88,6 +94,12 @@ textarea{resize:none;line-height:1.5}
 .danger{padding:13px 18px;border-radius:12px;background:#fff;color:var(--red);border:1px solid #ffd9d6;font-size:15px}
 .section{font-size:11.5px;color:var(--sub);margin:0 4px 7px}
 .arg-title{font-size:11.5px;color:var(--sub);padding:12px 4px 6px;letter-spacing:.2px}
+.card .hd{display:flex;align-items:center;gap:10px}
+.app-icon{width:34px;height:34px;border-radius:9px;flex:0 0 auto;object-fit:cover;background:#f2f2f5}
+.app-icon.ph{display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#fff;background:linear-gradient(135deg,#1FBF63,#0B7A3C)}
+.code{white-space:pre-wrap;word-break:break-all;font:12px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;color:#3a3a40;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;margin:0}
+.chip-star{flex:0 0 auto;padding:5px 12px;border-radius:999px;border:1px solid var(--line);background:#fff;font-size:12.5px;color:#45454b}
+.chip-star.on{background:#FFF6E5;border-color:#F5C86B;color:#B8760B;font-weight:600}
 .arg-title:first-child{padding-top:2px}
 .arg-note{font-size:11.5px;color:#9b9ba1;line-height:1.6;margin:0 4px 12px}
 .cat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 12px;margin-bottom:8px}
@@ -117,12 +129,13 @@ select#f-group{width:100%;font-size:15px}
       <div><h1>自用</h1><div class="sub" id="sub">加载中…</div></div>
     </div>
     <div class="acts">
+      <button class="ic" id="favBtn" title="只看收藏">★</button>
       <button class="ic" id="setBtn" title="设置">⚙</button>
       <button class="ic" id="addBtn" title="添加插件">＋</button>
       <button class="ic" id="syncBtn" title="同步上游">↻</button>
     </div>
   </div>
-  <input id="q" placeholder="搜索插件名、功能或作者" autocomplete="off">
+  <input id="q" placeholder="搜索名称、功能、拼音首字母" autocomplete="off">
   <div class="tabs" id="tabs"></div>
 </header>
 <main id="list"></main>
@@ -159,26 +172,17 @@ select#f-group{width:100%;font-size:15px}
   <button class="save" id="saveBtn">保存</button>
   <button class="danger" id="delBtn" style="display:none">删除</button>
 </div>
-<div class="mask" id="mask2"></div>
-<div class="sheet" id="argSheet">
-  <div class="sh"><h3>自定义参数</h3><button class="x" id="argClose">取消</button></div>
-  <div class="bd" id="argBody"></div>
-</div>
-<div class="bar" id="argBar">
-  <button class="save ghost-save" id="argDefault">用默认值</button>
-  <button class="save" id="argApply">应用并导入</button>
-</div>
-<div class="mask" id="mask3"></div>
-<div class="sheet" id="setSheet">
-  <div class="sh"><h3>设置</h3><button class="x" id="setClose">完成</button></div>
-  <div class="bd">
-    <p class="section">分类</p>
-    <div id="catList"></div>
-    <button class="ghost" id="catAdd" style="width:100%;margin-top:10px">＋ 新增分类</button>
-    <p class="arg-note" style="margin-top:14px">分类绑定仓库目录后，点「扫描」会把该目录里新增的文件自动收进来；文件里的 name / description 会被读取。</p>
-  </div>
+<div class="mask" id="mask4"></div>
+<div class="sheet" id="viewSheet">
+  <div class="sh"><h3 id="viewTitle">预览</h3><button class="x" id="viewClose">关闭</button></div>
+  <div class="bd"><pre class="code" id="viewBody"></pre></div>
 </div>
 <div class="toast" id="toast"></div>
 <script src="app.js"></script>
+<script>
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+</script>
 </body>
 </html>
