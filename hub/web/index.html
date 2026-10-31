@@ -51,7 +51,7 @@ h2{margin:0;font-size:15.5px;font-weight:600;letter-spacing:-.25px;flex:1;min-wi
 .tg{font-size:10.5px;padding:1px 7px;border-radius:6px;background:#f2f2f5;color:#7d7d84}
 .tg.warn{background:rgba(255,149,0,.11);color:#b26a00}
 .tg.self{background:rgba(18,161,80,.10);color:#0f7a3f}
-.ft{display:flex;align-items:center;gap:8px;border-top:1px solid #f4f4f6;padding-top:9px}
+.ft{display:flex;align-items:center;gap:8px;border-top:1px solid #f4f4f6;padding-top:9px;justify-content:flex-end}
 .src{flex:1;min-width:0;font-size:11.5px;color:var(--sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .src a{color:#5d5d64;text-decoration:none;border-bottom:1px dashed #c9c9cf}
 .repo,.more-btn{flex:0 0 auto;width:30px;height:30px;border-radius:9px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:#5f5f66;background:#fff;text-decoration:none}
@@ -90,6 +90,17 @@ textarea{resize:none;line-height:1.5}
 .arg-title{font-size:11.5px;color:var(--sub);padding:12px 4px 6px;letter-spacing:.2px}
 .arg-title:first-child{padding-top:2px}
 .arg-note{font-size:11.5px;color:#9b9ba1;line-height:1.6;margin:0 4px 12px}
+.cat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 12px;margin-bottom:8px}
+.cat .cr{display:flex;align-items:center;gap:8px}
+.cat .cn{font-size:14.5px;font-weight:600}
+.cat .cd{font-size:11px;color:var(--sub);margin-top:2px;font-family:ui-monospace,monospace}
+.cat .cb{margin-left:auto;display:flex;gap:6px}
+.cat .mini{padding:5px 10px;border-radius:8px;border:1px solid var(--line);background:#fff;font-size:12px;color:#3f3f45}
+.cat .mini.go2{background:var(--g);border-color:var(--g);color:#fff}
+.cat .edit{display:none;gap:6px;margin-top:9px;flex-direction:column}
+.cat.editing .edit{display:flex}
+.cat input,.cat select{border:1px solid var(--line);border-radius:8px;padding:7px 9px;font-size:13.5px;background:#fafafb}
+select#f-group{width:100%;font-size:15px}
 .arg-in{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:11px;padding:10px 12px;margin-bottom:8px}
 .arg-in span{flex:1;font-size:13.5px;color:#3f3f45}
 .arg-in input{flex:0 0 108px;text-align:right;font-size:14px;color:var(--g);font-family:ui-monospace,SFMono-Regular,monospace}
@@ -106,6 +117,7 @@ textarea{resize:none;line-height:1.5}
       <div><h1>自用</h1><div class="sub" id="sub">加载中…</div></div>
     </div>
     <div class="acts">
+      <button class="ic" id="setBtn" title="设置">⚙</button>
       <button class="ic" id="addBtn" title="添加插件">＋</button>
       <button class="ic" id="syncBtn" title="同步上游">↻</button>
     </div>
@@ -139,8 +151,7 @@ textarea{resize:none;line-height:1.5}
     </div>
     <p class="section" style="margin-top:16px">分类</p>
     <div class="group">
-      <div class="row"><input id="f-group" placeholder="例如 去广告 / 工具"></div>
-      <div class="row"><div class="tags-pick" id="tagPick"></div></div>
+      <div class="row"><select id="f-group"></select></div>
     </div>
   </div>
 </div>
@@ -156,6 +167,16 @@ textarea{resize:none;line-height:1.5}
 <div class="bar" id="argBar">
   <button class="save ghost-save" id="argDefault">用默认值</button>
   <button class="save" id="argApply">应用并导入</button>
+</div>
+<div class="mask" id="mask3"></div>
+<div class="sheet" id="setSheet">
+  <div class="sh"><h3>设置</h3><button class="x" id="setClose">完成</button></div>
+  <div class="bd">
+    <p class="section">分类</p>
+    <div id="catList"></div>
+    <button class="ghost" id="catAdd" style="width:100%;margin-top:10px">＋ 新增分类</button>
+    <p class="arg-note" style="margin-top:14px">分类绑定仓库目录后，点「扫描」会把该目录里新增的文件自动收进来；文件里的 name / description 会被读取。</p>
+  </div>
 </div>
 <div class="toast" id="toast"></div>
 <script src="app.js"></script>

@@ -29,6 +29,12 @@ CREATE TABLE IF NOT EXISTS plugins (
   created_at   TEXT DEFAULT (datetime('now','localtime')),
   updated_at   TEXT DEFAULT (datetime('now','localtime'))
 );
+CREATE TABLE IF NOT EXISTS categories (
+  name TEXT PRIMARY KEY,
+  dir  TEXT DEFAULT '',
+  kind TEXT DEFAULT 'module',
+  sort INTEGER DEFAULT 0
+);
 CREATE TABLE IF NOT EXISTS settings (
   k TEXT PRIMARY KEY,
   v TEXT
@@ -57,6 +63,14 @@ def init():
             c.execute("ALTER TABLE plugins ADD COLUMN norm_key TEXT DEFAULT ''")
         if "args" not in cols:
             c.execute("ALTER TABLE plugins ADD COLUMN args TEXT DEFAULT ''")
+        if "kind" not in cols:
+            c.execute("ALTER TABLE plugins ADD COLUMN kind TEXT DEFAULT 'module'")
+        # 首次：用现有条目的分组兜底生成分类
+        if c.execute("SELECT COUNT(*) n FROM categories").fetchone()[0] == 0:
+            for name, in c.execute("SELECT DISTINCT grp FROM plugins WHERE IFNULL(grp,'')<>''").fetchall():
+                c.execute("INSERT OR IGNORE INTO categories(name,dir,kind,sort) VALUES(?,?,?,?)",
+                          (name, 'egern/' if name in ('去广告', '工具') else '', 'module',
+                           {'去广告': 0, '工具': 1, '订阅': 2}.get(name, 9)))
         c.execute("CREATE INDEX IF NOT EXISTS idx_plugins_norm ON plugins(norm_key)")
 
 

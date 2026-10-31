@@ -15,6 +15,11 @@ from . import db, sync as upstream
 WEB_DIR = os.environ.get("WEB_DIR", "/app/web")
 CUSTOM_DIR = os.environ.get("CUSTOM_DIR", "/app/data/custom")
 CLONE_DIR = os.environ.get("CLONE_DIR", "/tmp/lks")
+GH_REPO = os.environ.get("SOURCE_REPO", "yiyu12138/ziyong")
+GH_BRANCH = os.environ.get("SOURCE_BRANCH", "main")
+GH_RAW = f"https://raw.githubusercontent.com/{GH_REPO}/{GH_BRANCH}/"
+GH_API = f"https://api.github.com/repos/{GH_REPO}/contents/"
+CONFIG_EXT = (".yaml", ".yml", ".sgmodule", ".json", ".list", ".conf")
 ADMIN_TOKEN = os.environ.get("ADMIN_TOKEN", "")
 SYNC_AT = os.environ.get("SYNC_AT", "04:17")
 SYNC_ENABLED = os.environ.get("SYNC_ENABLED", "0") == "1"
@@ -40,6 +45,7 @@ def row_to_dict(r):
         "installed": bool(r["installed"]), "unread": bool(r["unread"]),
         "updated_at": r["updated_at"], "norm_key": r["norm_key"],
         "args": json.loads(r["args"]) if r["args"] else [],
+        "kind": r["kind"] or "module",
     }
 
 
@@ -362,6 +368,118 @@ def fetch_meta(request: Request, payload: dict = Body(...)):
     return {"name": meta.get("name", ""), "desc": meta.get("desc", ""),
             "author": author, "author_url": author_url, "repo_url": repo,
             "has_script": bool(re.search(r"^\[Script\]", text, re.M))}
+
+
+# ---------- 分类 ----------
+@app.get("/api/categories")
+def list_categories():
+    with db.conn() as c:
+        rows = c.execute("""SELECT c.*, (SELECT COUNT(*) FROM plugins p WHERE p.grp=c.name) n
+                            FROM categories c ORDER BY c.sort, c.name""").fetchall()
+    return [dict(r) for r in rows]
+
+
+@app.post("/api/categories")
+def create_category(request: Request, payload: dict = Body(...)):
+    require_admin(request)
+    name = (payload.get("name") or "").strip()
+    if not name:
+        raise HTTPException(400, "分类名不能为空")
+    with db.conn() as c:
+        c.execute("""INSERT INTO categories(name,dir,kind,sort) VALUES(?,?,?,?)
+                     ON CONFLICT(name) DO UPDATE SET dir=excluded.dir, kind=excluded.kind""",
+                  (name, (payload.get("dir") or "").strip(), payload.get("kind") or "module",
+                   int(payload.get("sort") or 0)))
+    return {"ok": True}
+
+
+@app.put("/api/categories/{name}")
+def update_category(request: Request, name: str, payload: dict = Body(...)):
+    require_admin(request)
+    new = (payload.get("name") or "").strip()
+    with db.conn() as c:
+        row = c.execute("SELECT * FROM categories WHERE name=?", (name,)).fetchone()
+        if not row:
+            raise HTTPException(404)
+        c.execute("UPDATE categories SET dir=?, kind=? WHERE name=?",
+                  (payload.get("dir", row["dir"]), payload.get("kind", row["kind"]), name))
+        if new and new != name:
+            c.execute("UPDATE categories SET name=? WHERE name=?", (new, name))
+            c.execute("UPDATE plugins SET grp=? WHERE grp=?", (new, name))
+    return {"ok": True}
+
+
+@app.delete("/api/categories/{name}")
+def delete_category(request: Request, name: str):
+    require_admin(request)
+    with db.conn() as c:
+        n = c.execute("SELECT COUNT(*) n FROM plugins WHERE grp=?", (name,)).fetchone()["n"]
+        if n:
+            raise HTTPException(400, f"这个分类下还有 {n} 个条目，先删掉或移走")
+        c.execute("DELETE FROM categories WHERE name=?", (name,))
+    return {"ok": True}
+
+
+# ---------- 从仓库目录导入 ----------
+def _gh_list(path):
+    url = GH_API + urllib.parse.quote(path) + "?ref=" + GH_BRANCH
+    req = urllib.request.Request(url, headers={
+        "User-Agent": "egern-hub/1.0", "Accept": "application/vnd.github+json"})
+    return json.loads(urllib.request.urlopen(req, timeout=25).read())
+
+
+def _walk_repo(path, depth=0, skip=()):
+    if depth > 3:
+        return
+    for item in _gh_list(path):
+        if item["type"] == "dir":
+            if "/images" in "/" + item["path"] or item["name"].startswith("."):
+                continue
+            if any(sk in "/" + item["path"] + "/" for sk in skip):
+                continue
+            yield from _walk_repo(item["path"], depth + 1, skip)
+        elif item["type"] == "file" and item["name"].lower().endswith(CONFIG_EXT):
+            yield item["path"]
+
+
+@app.post("/api/categories/{name}/scan")
+async def scan_category(request: Request, name: str):
+    require_admin(request)
+    with db.conn() as c:
+        cat = c.execute("SELECT * FROM categories WHERE name=?", (name,)).fetchone()
+    if not cat:
+        raise HTTPException(404, "分类不存在")
+    if not cat["dir"]:
+        raise HTTPException(400, "这个分类还没绑定仓库目录")
+
+    def work():
+        skip = ("/rules/", "/iconset/", "/node_modules/") if cat["kind"] == "module" else ()
+        files = list(_walk_repo(cat["dir"].strip("/"), 0, skip))
+        added, skipped, failed = 0, 0, []
+        with db.conn() as c:
+            for f in files:
+                url = GH_RAW + urllib.parse.quote(f)
+                if c.execute("SELECT 1 FROM plugins WHERE module_url=?", (url,)).fetchone():
+                    skipped += 1
+                    continue
+                try:
+                    req = urllib.request.Request(url, headers={"User-Agent": "egern-hub/1.0"})
+                    text = urllib.request.urlopen(req, timeout=20).read().decode("utf-8", "ignore")
+                except Exception as e:
+                    failed.append(f"{f}: {e}")
+                    continue
+                meta = parse_meta(text)
+                nm = meta.get("name") or f.rsplit("/", 1)[-1].rsplit(".", 1)[0]
+                desc = meta.get("desc") or meta.get("description") or ""
+                c.execute("""INSERT INTO plugins(name,description,author,author_url,repo_url,
+                             module_url,grp,tags,norm_key,kind,is_self)
+                             VALUES(?,?,?,?,?,?,?,'',?,?,1)""",
+                          (nm, desc, meta.get("author", ""), "", "", url, name,
+                           db.norm_key(nm), cat["kind"]))
+                added += 1
+        return {"added": added, "skipped": skipped, "failed": failed[:5], "scanned": len(files)}
+
+    return await asyncio.to_thread(work)
 
 
 @app.get("/api/export")

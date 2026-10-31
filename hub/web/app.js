@@ -53,7 +53,9 @@ function cardHtml(g) {
     <p class="desc">${esc(v.desc)}</p>
     <div class="ft">
       ${v.is_self ? '<button class="more-btn" data-act="edit" data-id="' + v.id + '" title="编辑">⋯</button>' : ''}
-      <a class="go" href="${egernLink(v)}" data-act="use" data-id="${v.id}">${v.installed ? '已导入' : '导入'}</a>
+      ${(v.kind === 'rule' || v.kind === 'sub')
+        ? `<button class="go" data-act="copy" data-id="${v.id}" data-url="${esc(v.url)}">复制链接</button>`
+        : `<a class="go" href="${egernLink(v)}" data-act="use" data-id="${v.id}">${v.installed ? '已导入' : '导入'}</a>`}
     </div>
   </article>`;
 }
@@ -164,6 +166,12 @@ $('#list').addEventListener('click', async e => {
     } catch (err) { toast(err.message); }
     return;
   }
+  if (act.dataset.act === 'copy') {
+    const url = act.dataset.url;
+    const ok = await copyText(url);
+    toast(ok ? '链接已复制' : url);
+    return;
+  }
   if (act.dataset.act === 'edit') {
     e.preventDefault();
     openForm(g.variants.find(x => String(x.id) === id)); return;
@@ -206,17 +214,17 @@ function openForm(it) {
   $('#f-author_url').value = it ? it.author_url : '';
   $('#f-repo_url').value = it ? it.repo_url : '';
   $('#probeHint').textContent = '读取后自动填名称、说明、作者、仓库';
-  $('#f-group').value = it ? (it.group || '') : '';
-  state.formTags = new Set((state.meta && state.meta.groups ? state.meta.groups.map(g => g.key) : []).filter(k => k !== '全部'));
-  renderTagPick();
+  if (!categories.length) loadCategories().then(() => { renderGroupOptions(); }).catch(() => {});
+  renderGroupOptions();
+  $('#f-group').value = it ? (it.group || '') : (categories[0] ? categories[0].name : '');
   $('#delBtn').style.display = it ? 'block' : 'none';
   $('#mask').classList.add('on');
   $('#sheet').classList.add('on');
   $('#bar').classList.add('on');
 }
 
-function renderTagPick() {
-  const cur = $('#f-group').value.trim();
+function renderTagPick_unused() {
+  const cur = '';
   const set = ['去广告', '工具', '订阅', ...state.formTags];
   const uniq = [...new Set(set.filter(Boolean))];
   $('#tagPick').innerHTML = uniq.map(t =>
@@ -233,12 +241,8 @@ function closeForm() {
 $('#addBtn').addEventListener('click', () => openForm(null));
 $('#closeBtn').addEventListener('click', closeForm);
 $('#mask').addEventListener('click', closeForm);
-$('#tagPick').addEventListener('click', e => {
-  const b = e.target.closest('.tag'); if (!b) return;
-  $('#f-group').value = b.dataset.t;
-  renderTagPick();
-});
-$('#f-group').addEventListener('input', renderTagPick);
+
+
 
 $('#probeBtn').addEventListener('click', async () => {
   const url = $('#f-url').value.trim();
@@ -285,6 +289,7 @@ $('#delBtn').addEventListener('click', async () => {
   } catch (e) { toast(e.message); }
 });
 
+loadCategories().then(renderGroupOptions).catch(() => {});
 refresh().catch(e => { $('#sub').textContent = '加载失败：' + e.message; });
 
 // ---- 参数自定义 ----
@@ -344,3 +349,131 @@ $('#argApply').addEventListener('click', async () => {
     window.location.href = url;
   } catch (e) { toast(e.message); }
 });
+
+// ---- 设置：分类管理 ----
+let categories = [];
+
+async function loadCategories() {
+  categories = await api('/api/categories');
+  return categories;
+}
+
+function renderCats() {
+  $('#catList').innerHTML = categories.map(c => `
+    <div class="cat" data-name="${esc(c.name)}">
+      <div class="cr">
+        <div style="min-width:0">
+          <div class="cn">${esc(c.name)}</div>
+          <div class="cd">${c.dir ? esc(c.dir) : '未绑定目录'} · ${c.n} 个</div>
+        </div>
+        <div class="cb">
+          <button class="mini" data-act="edit">编辑</button>
+          <button class="mini go2" data-act="scan">扫描</button>
+        </div>
+      </div>
+      <div class="edit">
+        <input class="e-name" value="${esc(c.name)}" placeholder="分类名">
+        <input class="e-dir" value="${esc(c.dir || '')}" placeholder="仓库目录，如 egern/ 或 rules/">
+        <select class="e-kind">
+          <option value="module"${c.kind === 'module' ? ' selected' : ''}>Egern 模块</option>
+          <option value="rule"${c.kind === 'rule' ? ' selected' : ''}>规则集</option>
+          <option value="sub"${c.kind === 'sub' ? ' selected' : ''}>订阅 / 其他</option>
+        </select>
+        <div style="display:flex;gap:8px">
+          <button class="mini go2" data-act="save" style="flex:1">保存</button>
+          <button class="mini" data-act="del" style="color:#d1403a;border-color:#ffd9d6">删除</button>
+        </div>
+      </div>
+    </div>`).join('') || '<div class="arg-note">还没有分类，点下面新增一个</div>';
+}
+
+$('#catList').addEventListener('click', async e => {
+  const btn = e.target.closest('[data-act]');
+  const box = e.target.closest('.cat');
+  if (!btn || !box) return;
+  const name = box.dataset.name;
+  const act = btn.dataset.act;
+  if (act === 'edit') { box.classList.toggle('editing'); return; }
+  if (act === 'scan') {
+    btn.textContent = '…';
+    try {
+      const r = await api(`/api/categories/${encodeURIComponent(name)}/scan`, { method: 'POST' });
+      toast(`扫描 ${r.scanned} 个文件，新增 ${r.added} 个`);
+      await refresh(); await loadCategories(); renderCats(); renderGroupOptions();
+    } catch (err) { toast(err.message); }
+    btn.textContent = '扫描';
+    return;
+  }
+  if (act === 'save') {
+    const body = {
+      name: box.querySelector('.e-name').value.trim(),
+      dir: box.querySelector('.e-dir').value.trim(),
+      kind: box.querySelector('.e-kind').value,
+    };
+    if (!body.name) { toast('分类名不能空'); return; }
+    try {
+      await api('/api/categories/' + encodeURIComponent(name), { method: 'PUT', body: JSON.stringify(body) });
+      toast('已保存');
+      await loadCategories(); renderCats(); renderGroupOptions(); await refresh();
+    } catch (err) { toast(err.message); }
+    return;
+  }
+  if (act === 'del') {
+    if (!confirm(`删除分类「${name}」？`)) return;
+    try {
+      await api('/api/categories/' + encodeURIComponent(name), { method: 'DELETE' });
+      await loadCategories(); renderCats(); renderGroupOptions(); await refresh();
+    } catch (err) { toast(err.message); }
+  }
+});
+
+$('#catAdd').addEventListener('click', async () => {
+  const name = prompt('新分类名称，比如 Egern 插件 / 分流规则 / 某某订阅');
+  if (!name) return;
+  try {
+    await api('/api/categories', { method: 'POST', body: JSON.stringify({ name: name.trim(), dir: '', kind: 'module' }) });
+    await loadCategories(); renderCats(); renderGroupOptions();
+  } catch (e) { toast(e.message); }
+});
+
+function renderGroupOptions() {
+  const sel = $('#f-group');
+  if (!sel) return;
+  const cur = sel.value;
+  sel.innerHTML = categories.map(c => `<option value="${esc(c.name)}">${esc(c.name)}</option>`).join('');
+  if (cur && categories.some(c => c.name === cur)) sel.value = cur;
+}
+
+$('#setBtn').addEventListener('click', async () => {
+  try { await loadCategories(); } catch (e) { toast(e.message); }
+  renderCats(); renderGroupOptions();
+  $('#mask3').classList.add('on');
+  $('#setSheet').classList.add('on');
+});
+$('#setClose').addEventListener('click', () => {
+  $('#mask3').classList.remove('on');
+  $('#setSheet').classList.remove('on');
+});
+$('#mask3').addEventListener('click', () => {
+  $('#mask3').classList.remove('on');
+  $('#setSheet').classList.remove('on');
+});
+
+async function copyText(text) {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch (e) {}
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch (e) {}
+  ta.remove();
+  return ok;
+}
