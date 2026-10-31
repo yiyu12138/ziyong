@@ -1,0 +1,19 @@
+services:
+  egern-hub:
+    build: .
+    container_name: egern-hub
+    restart: always
+    ports:
+      - "8788:8788"
+    volumes:
+      - ./data:/app/data
+      - ./cache:/tmp/lks
+    environment:
+      - TZ=Asia/Shanghai
+      - ADMIN_TOKEN=${ADMIN_TOKEN:-}
+      - SYNC_AT=04:17
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
