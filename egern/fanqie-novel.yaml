@@ -1,4 +1,4 @@
-name: "番茄小说去广告（规则版）"
+name: "番茄小说去广告・素材拦截"
 description: "拦截番茄小说/字节系广告联盟域名与广告素材接口，覆盖开屏、章末与信息流广告。移植自 zqzess 的 Loon 插件 fanqienovel.plugin。需要安装并信任 Egern 根证书。"
 author: "zqzess · Egern 移植 yiyu12138"
 homepage: "https://github.com/yiyu12138/ziyong"
