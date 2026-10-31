@@ -1,10 +1,18 @@
 {
   "name": "ziyong icons",
-  "description": "自用图标集：3 张图 / 4 个名称",
+  "description": "自用图标集：4 张图 / 6 个名称",
   "icons": [
     {
       "name": "ASH",
       "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/ASH.png?v=f5cd5c7a"
+    },
+    {
+      "name": "中国移动",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E4%B8%AD%E5%9B%BD%E7%A7%BB%E5%8A%A8~%E7%A7%BB%E5%8A%A8.png?v=89d7a4d1"
+    },
+    {
+      "name": "移动",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E4%B8%AD%E5%9B%BD%E7%A7%BB%E5%8A%A8~%E7%A7%BB%E5%8A%A8.png?v=89d7a4d1"
     },
     {
       "name": "吹雪",
