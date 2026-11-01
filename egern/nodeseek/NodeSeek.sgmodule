@@ -1,8 +1,0 @@
-#!name=NodeSeek 每日签到
-#!desc=NodeSeek 每日签到领取鸡腿（手动 Cookie 版，无需 MITM）。在参数里填入浏览器复制的 pjwt Cookie，每天定时自动签到。
-#!icon=https://www.nodeseek.com/favicon.ico
-#!arguments=COOKIE:pjwt=此处粘贴你的pjwt&CRON:10 9 * * *
-#!arguments-desc=COOKIE 填浏览器里 www.nodeseek.com 的 pjwt 值（或整串 Cookie）；CRON 为签到时间
-
-[Script]
-NodeSeek 签到 = type=cron, cronexp="{{{CRON}}}", script-path=https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/nodeseek/nodeseek.js, argument={{{COOKIE}}}, timeout=60
