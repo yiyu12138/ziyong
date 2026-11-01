@@ -2,9 +2,20 @@
 
 自用 Egern 模块与规则集。导入方式：Egern → 模块 → 添加模块 → 粘贴 Raw 链接。
 
+完整模块清单（20 个模块 + 2 个面板 + 5 条规则）见仓库根目录 [README.md](../README.md)。本文只写需要补充说明的几个。
+
+| 目录 | 内容 |
+| --- | --- |
+| `*.yaml` | 模块本体，一个文件一个模块 |
+| `rules/` | 分流规则模块，导入后可选择策略组 |
+| `scripts/` | 淘宝/京东/拼多多/小象超市的改写脚本，被 yaml 引用 |
+| `nodeseek/` | NodeSeek 签到模块与脚本 |
+| `deepseek/` | DeepSeek 余额脚本（对应模块已移除，仅留档） |
+| `iconset/` | 通用图标订阅，见 [iconset/README.md](iconset/README.md) |
+
 ---
 
-## 1. 红果短剧・红果漫剧去广告
+## 红果短剧・红果漫剧去广告
 
 **Raw 链接**
 
@@ -32,7 +43,7 @@ https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/hongguo-adblock.ya
 - 个别广告域名有证书固定，解密失败时域名 REJECT 仍然生效，不影响拦截结果
 - 「看激励广告解锁下一集」是服务器端发奖，纯拦截无法伪造，需等待系统超时放行，属正常现象
 
-## 2. 可莉广告过滤器（Egern 原生版）
+## 可莉广告过滤器（Egern 原生版）
 
 **Raw 链接**
 
@@ -74,18 +85,6 @@ https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/keli-ads-egern.yam
 - Ultra Mobile：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/rules/UltraMobile.yaml
 - Binance：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/rules/Binance.yaml
 
-## DeepSeek 余额面板
-
-```
-https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/deepseek/DeepSeek-Balance.sgmodule
-```
-
-- 面板显示 DeepSeek 开放平台的账户余额：总余额、充值余额、赠金余额、刷新时间
-- 安装后到模块「参数」里把 `APIKey` 换成平台 Key（`https://platform.deepseek.com/api_keys`）
-- 数据来自 `GET https://api.deepseek.com/user/balance`，Key 只存在本机模块参数里，不进仓库
-- 默认 600 秒刷新，点面板可手动刷新；`good` 绿色=正常，`alert` 黄色=无余额/不可用，`error` 红色=Key 无效或网络失败
-- 结构沿用 Surge 的 `[Panel]` + `[Script] generic`，参数用 Egern 的 `{{{APIKey}}}` 占位符（Surge 原版写的是 `%api_key%`，在 Egern 里不会被替换）
-
 ## NodeSeek 每日签到
 
 **Raw 链接**
@@ -96,11 +95,3 @@ https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/nodeseek/NodeSeek.
 
 - 上游脚本：[Phowx/script](https://github.com/Phowx/script)（MIT，本仓库镜像 `egern/nodeseek/nodeseek.js`），模块按 Egern 参数占位符 `{{{ }}}` 转写
 - 用法：导入模块后，先在 Egern 开启 MITM 并信任 CA，登录并打开一次 www.nodeseek.com 抓取 pjwt Cookie，之后每天 9:10 自动签到（`RANDOM=true` 随机鸡腿，可在模块参数里改 cron 与 RANDOM）
-
-## 3. 番茄小说去广告
-
-- 地址：https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/dragonread-adblock.yaml
-- 移植自 kelee 的 Loon 插件 DragonRead_remove_ads.lpx（2025-05-13 版）
-- 47 条 REJECT 规则：开屏/章末/听书广告域名、穿山甲 Pangle SDK、埋点上报（snssdk/pstatp/bytedance）
-- 全部为网络层拦截，不需要 MITM，也不需要配置证书
-- 注意：其中 bytescm.com（字节前端 CDN）一条在原版中标记为「误杀」，若影响正文加载，在该条 policy 旁加 disabled: true
