@@ -1,0 +1,6 @@
+name: "发布测试条目"
+description: "验证站点→仓库"
+rules:
+  - domain_suffix:
+      match: example.com
+      policy: REJECT
