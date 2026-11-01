@@ -1,6 +1,6 @@
 {
   "name": "ziyong icons",
-  "description": "自用图标集：5 张图 / 7 个名称",
+  "description": "自用图标集：6 张图 / 9 个名称",
   "icons": [
     {
       "name": "ASH",
@@ -17,6 +17,14 @@
     {
       "name": "移动",
       "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E4%B8%AD%E5%9B%BD%E7%A7%BB%E5%8A%A8~%E7%A7%BB%E5%8A%A8.png?v=89d7a4d1"
+    },
+    {
+      "name": "可莉",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E5%8F%AF%E8%8E%89~kelee.png?v=3c56083a"
+    },
+    {
+      "name": "kelee",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E5%8F%AF%E8%8E%89~kelee.png?v=3c56083a"
     },
     {
       "name": "吹雪",
