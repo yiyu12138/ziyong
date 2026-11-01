@@ -1,10 +1,18 @@
 {
   "name": "ziyong icons",
-  "description": "自用图标集：6 张图 / 9 个名称",
+  "description": "自用图标集：7 张图 / 11 个名称",
   "icons": [
     {
       "name": "ASH",
       "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/ASH.png?v=f5cd5c7a"
+    },
+    {
+      "name": "DualSubs",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/DualSubs~%E5%8F%8C%E8%AF%AD%E5%AD%97%E5%B9%95.png?v=ea99f947"
+    },
+    {
+      "name": "双语字幕",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/DualSubs~%E5%8F%8C%E8%AF%AD%E5%AD%97%E5%B9%95.png?v=ea99f947"
     },
     {
       "name": "VD",
