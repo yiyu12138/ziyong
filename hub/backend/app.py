@@ -9,10 +9,10 @@ import urllib.parse
 import urllib.request
 
 from fastapi import Body, FastAPI, HTTPException, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
-from . import db, backup
+from . import backup, db, publish as gh
 
 WEB_DIR = os.environ.get("WEB_DIR", "/app/web")
 CUSTOM_DIR = os.environ.get("CUSTOM_DIR", "/app/data/custom")
@@ -153,7 +153,7 @@ def build_groups(rows):
 @app.get("/api/bootstrap")
 def bootstrap():
     with db.conn() as c:
-        rows = c.execute("SELECT * FROM plugins").fetchall()
+        rows = c.execute("SELECT * FROM plugins WHERE IFNULL(deleted,0)=0").fetchall()
         cat_names = [r["name"] for r in c.execute("SELECT name FROM categories ORDER BY sort, name")]
     groups_data = build_groups(rows)
     counts = {"全部": len(groups_data)}
@@ -183,7 +183,7 @@ def bootstrap():
 @app.get("/api/plugins")
 def list_plugins(group: str = "全部", tag: str = "", q: str = "", only_fav: int = 0):
     with db.conn() as c:
-        rows = c.execute("SELECT * FROM plugins").fetchall()
+        rows = c.execute("SELECT * FROM plugins WHERE IFNULL(deleted,0)=0").fetchall()
     groups = build_groups(rows)
     out = []
     kw = (q or "").strip().lower()
@@ -489,6 +489,147 @@ def plugin_content(pid: int, lines: int = 120):
             "text": "\n".join(all_lines[:lines]), "truncated": len(all_lines) > lines}
 
 
+
+
+# ---------- 后台 ----------
+def slugify(name):
+    import hashlib
+    base = re.sub(r"[^0-9A-Za-z\u4e00-\u9fa5]+", "-", (name or "").strip()).strip("-").lower()
+    if not base:
+        base = "item"
+    if re.search(r"[^0-9A-Za-z\-]", base):
+        base = "item-" + hashlib.md5(base.encode()).hexdigest()[:8]
+    return base[:40]
+
+
+@app.get("/admin")
+def admin_page():
+    return FileResponse(os.path.join(WEB_DIR, "admin.html"))
+
+
+def _rel_of(r):
+    rel = r["source_path"] or ""
+    if not rel and (r["module_url"] or "").startswith(GH_RAW):
+        rel = urllib.parse.unquote(r["module_url"][len(GH_RAW):])
+    return rel
+
+
+@app.get("/api/admin/items")
+def admin_items():
+    with db.conn() as c:
+        rows = c.execute("SELECT id,name,grp,icon,kind,slug,source_path,module_url,dirty,deleted,published_at FROM plugins ORDER BY grp, name").fetchall()
+    out = []
+    for r in rows:
+        d = dict(r)
+        d["source_path"] = _rel_of(r)
+        d["slug"] = d["slug"] or (d["source_path"].split("/")[-1].rsplit(".", 1)[0] if d["source_path"] else "")
+        out.append(d)
+    return out
+
+
+@app.get("/api/admin/items/{pid}")
+def admin_item(pid: int):
+    with db.conn() as c:
+        r = c.execute("SELECT * FROM plugins WHERE id=?", (pid,)).fetchone()
+    if not r:
+        raise HTTPException(404)
+    item = dict(r)
+    if not item.get("body"):
+        # 从仓库文件补正文
+        rel = item.get("source_path") or ""
+        if not rel and (item.get("module_url") or "").startswith(GH_RAW):
+            rel = urllib.parse.unquote(item["module_url"][len(GH_RAW):])
+        if rel:
+            local = os.path.join(SRC_DIR, rel)
+            if os.path.exists(local):
+                item["body"] = open(local, encoding="utf-8", errors="ignore").read()
+    return item
+
+
+@app.post("/api/admin/items")
+async def admin_create(payload: dict = Body(...)):
+    name = (payload.get("name") or "").strip()
+    grp = (payload.get("group") or "Egern 插件").strip()
+    if not name:
+        raise HTTPException(400, "名称必填")
+    slug = (payload.get("slug") or slugify(name)).strip()
+    body = payload.get("body") or ""
+    with db.conn() as c:
+        cat = c.execute("SELECT dir,kind FROM categories WHERE name=?", (grp,)).fetchone()
+        kind = cat["kind"] if cat else "module"
+        base_dir = (cat["dir"].strip("/") if cat and cat["dir"] else "egern")
+        path = f"{base_dir}/{slug}.yaml"
+        url = GH_RAW + urllib.parse.quote(path)
+        c.execute("""INSERT INTO plugins(name,description,author,author_url,repo_url,module_url,
+                     grp,tags,norm_key,kind,icon,pinyin,source_path,body,slug,dirty,is_self)
+                     VALUES(?,?,?,?,?,?,?,'',?,?,?,?,?,?,?,1,1)""",
+                  (name, payload.get("desc", ""), payload.get("author", ""), "", "", url,
+                   grp, db.norm_key(name), kind, payload.get("icon", ""), db.pinyin_key(name),
+                   path, body, slug))
+        pid = c.execute("SELECT last_insert_rowid() id").fetchone()["id"]
+    return {"id": pid, "path": path}
+
+
+@app.put("/api/admin/items/{pid}")
+def admin_update(pid: int, payload: dict = Body(...)):
+    with db.conn() as c:
+        r = c.execute("SELECT * FROM plugins WHERE id=?", (pid,)).fetchone()
+        if not r:
+            raise HTTPException(404)
+        name = payload.get("name", r["name"])
+        c.execute("""UPDATE plugins SET name=?,description=?,author=?,grp=?,icon=?,body=?,
+                     slug=?,source_path=?,norm_key=?,pinyin=?,dirty=1,updated_at=datetime('now','localtime')
+                     WHERE id=?""",
+                  (name, payload.get("desc", r["description"]), payload.get("author", r["author"]),
+                   payload.get("group", r["grp"]), payload.get("icon", r["icon"]),
+                   payload.get("body", r["body"]), payload.get("slug", r["slug"]),
+                   _rel_of(r), db.norm_key(name), db.pinyin_key(name), pid))
+    return {"ok": True}
+
+
+@app.delete("/api/admin/items/{pid}")
+def admin_delete(pid: int):
+    with db.conn() as c:
+        r = c.execute("SELECT * FROM plugins WHERE id=?", (pid,)).fetchone()
+        if not r:
+            raise HTTPException(404)
+        if r["source_path"]:
+            c.execute("UPDATE plugins SET deleted=1, dirty=1 WHERE id=?", (pid,))
+        else:
+            c.execute("DELETE FROM plugins WHERE id=?", (pid,))
+    return {"ok": True}
+
+
+@app.post("/api/publish")
+def do_publish():
+    if not os.environ.get("GH_TOKEN"):
+        raise HTTPException(400, "服务器没配 GH_TOKEN，发布不了")
+    files = {}
+    with db.conn() as c:
+        rows = c.execute("SELECT * FROM plugins WHERE dirty=1 OR deleted=1").fetchall()
+    for r in rows:
+        path = _rel_of(r) or f"egern/{(r['slug'] or slugify(r['name']))}.yaml"
+        if r["deleted"]:
+            files[path] = None
+        else:
+            files[path] = r["body"] or (
+                f'name: "{r["name"]}"\n'
+                f'description: "{r["description"] or ""}"\n'
+                f'author: "{r["author"] or ""}"\n\n'
+                "rules: []\n")
+    if not files:
+        return {"published": 0, "message": "没有待发布的改动"}
+    try:
+        sha = gh.publish(files, message="publish: " + ", ".join(
+            sorted(os.path.basename(p) for p in files))[:120])
+    except gh.GitHubError as e:
+        raise HTTPException(400, str(e))
+    with db.conn() as c:
+        c.execute("UPDATE plugins SET dirty=0, published_at=datetime('now','localtime') WHERE dirty=1")
+        c.execute("DELETE FROM plugins WHERE deleted=1")
+    return {"published": len(files), "commit": sha}
+
+
 @app.get("/api/export")
 def export_all(request: Request):
     require_admin(request)
@@ -517,4 +658,12 @@ async def import_all(request: Request, rows: list = Body(...)):
 
 os.makedirs(CUSTOM_DIR, exist_ok=True)
 app.mount("/custom", StaticFiles(directory=CUSTOM_DIR), name="custom")
+@app.middleware("http")
+async def no_cache_static(request: Request, call_next):
+    response = await call_next(request)
+    if not request.url.path.startswith("/api/"):
+        response.headers["Cache-Control"] = "no-cache, must-revalidate, max-age=0"
+    return response
+
+
 app.mount("/", StaticFiles(directory=WEB_DIR, html=True), name="web")

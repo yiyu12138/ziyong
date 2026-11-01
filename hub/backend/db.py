@@ -24,6 +24,11 @@ CREATE TABLE IF NOT EXISTS plugins (
   args         TEXT DEFAULT '',
   icon         TEXT DEFAULT '',
   pinyin       TEXT DEFAULT '',
+  body         TEXT DEFAULT '',
+  slug         TEXT DEFAULT '',
+  dirty        INTEGER DEFAULT 0,
+  deleted      INTEGER DEFAULT 0,
+  published_at TEXT DEFAULT '',
   is_self      INTEGER DEFAULT 0,
   favorite     INTEGER DEFAULT 0,
   installed    INTEGER DEFAULT 0,
@@ -71,6 +76,15 @@ def init():
             c.execute("ALTER TABLE plugins ADD COLUMN icon TEXT DEFAULT ''")
         if "pinyin" not in cols:
             c.execute("ALTER TABLE plugins ADD COLUMN pinyin TEXT DEFAULT ''")
+        for col, ddl in (
+            ("body", "ALTER TABLE plugins ADD COLUMN body TEXT DEFAULT ''"),
+            ("slug", "ALTER TABLE plugins ADD COLUMN slug TEXT DEFAULT ''"),
+            ("dirty", "ALTER TABLE plugins ADD COLUMN dirty INTEGER DEFAULT 0"),
+            ("deleted", "ALTER TABLE plugins ADD COLUMN deleted INTEGER DEFAULT 0"),
+            ("published_at", "ALTER TABLE plugins ADD COLUMN published_at TEXT DEFAULT ''"),
+        ):
+            if col not in cols:
+                c.execute(ddl)
         # 首次：用现有条目的分组兜底生成分类
         if c.execute("SELECT COUNT(*) n FROM categories").fetchone()[0] == 0:
             for name, in c.execute("SELECT DISTINCT grp FROM plugins WHERE IFNULL(grp,'')<>''").fetchall():
