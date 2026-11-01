@@ -1,6 +1,6 @@
 {
   "name": "ziyong icons",
-  "description": "自用图标集：7 张图 / 11 个名称",
+  "description": "自用图标集：8 张图 / 8 个名称",
   "icons": [
     {
       "name": "ASH",
@@ -8,11 +8,11 @@
     },
     {
       "name": "DualSubs",
-      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/DualSubs~%E5%8F%8C%E8%AF%AD%E5%AD%97%E5%B9%95.png?v=78efdfcf"
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/DualSubs.png?v=78efdfcf"
     },
     {
-      "name": "双语字幕",
-      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/DualSubs~%E5%8F%8C%E8%AF%AD%E5%AD%97%E5%B9%95.png?v=78efdfcf"
+      "name": "Egern",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Egern.png?v=47982eec"
     },
     {
       "name": "VD",
@@ -20,19 +20,11 @@
     },
     {
       "name": "中国移动",
-      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E4%B8%AD%E5%9B%BD%E7%A7%BB%E5%8A%A8~%E7%A7%BB%E5%8A%A8.png?v=89d7a4d1"
-    },
-    {
-      "name": "移动",
-      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E4%B8%AD%E5%9B%BD%E7%A7%BB%E5%8A%A8~%E7%A7%BB%E5%8A%A8.png?v=89d7a4d1"
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E4%B8%AD%E5%9B%BD%E7%A7%BB%E5%8A%A8.png?v=89d7a4d1"
     },
     {
       "name": "可莉",
-      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E5%8F%AF%E8%8E%89~kelee.png?v=3c56083a"
-    },
-    {
-      "name": "kelee",
-      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E5%8F%AF%E8%8E%89~kelee.png?v=3c56083a"
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E5%8F%AF%E8%8E%89.png?v=3c56083a"
     },
     {
       "name": "吹雪",
@@ -40,11 +32,7 @@
     },
     {
       "name": "红果短剧",
-      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E7%BA%A2%E6%9E%9C%E7%9F%AD%E5%89%A7~%E7%BA%A2%E6%9E%9C.png?v=847117cb"
-    },
-    {
-      "name": "红果",
-      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E7%BA%A2%E6%9E%9C%E7%9F%AD%E5%89%A7~%E7%BA%A2%E6%9E%9C.png?v=847117cb"
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E7%BA%A2%E6%9E%9C%E7%9F%AD%E5%89%A7.png?v=847117cb"
     }
   ]
 }
