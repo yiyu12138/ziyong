@@ -1,10 +1,14 @@
 {
   "name": "ziyong icons",
-  "description": "自用图标集：4 张图 / 6 个名称",
+  "description": "自用图标集：5 张图 / 7 个名称",
   "icons": [
     {
       "name": "ASH",
       "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/ASH.png?v=f5cd5c7a"
+    },
+    {
+      "name": "VD",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/VD.png?v=7ad21488"
     },
     {
       "name": "中国移动",
