@@ -1,220 +1,182 @@
 name: "AI 规则"
-description: "由 loon/AI.lsr 转换，可在模块设置里选择策略组"
-author: "yiyu12138"
+description: "AI 服务分流：Gemini / ChatGPT / Claude / Grok / Perplexity / Cursor / Windsurf 等，共 55 条（基于 Repcz 规则集重做，已剔除 api.github.com）。"
+author: "Repcz / yiyu12138"
 homepage: "https://github.com/yiyu12138/ziyong"
-icon: "arrow.triangle.branch"
+icon: "sparkles"
 
 compat_arguments:
   POLICY: "Proxy"
 
 compat_arguments_desc: |
-  POLICY：匹配到这些域名/IP 后走哪个策略。填代理服务器或策略组的名称，默认 Proxy。
+  POLICY：匹配到这些域名后走哪个策略。填代理服务器或策略组的名称，默认 Proxy。
 
 rules:
-  # Gemini
+  # 精确域名
   - domain:
-      match: "ai.google.dev"
-      policy: {{{POLICY}}}
-  - domain:
-      match: "aida.googleapis.com"
+      match: 'ai.google.dev'
       policy: {{{POLICY}}}
   - domain:
-      match: "aistudio.google.com"
+      match: 'aida.googleapis.com'
       policy: {{{POLICY}}}
   - domain:
-      match: "alkalicore-pa.clients6.google.com"
+      match: 'aisandbox-pa.googleapis.com'
       policy: {{{POLICY}}}
   - domain:
-      match: "alkalimakersuite-pa.clients6.google.com"
+      match: 'alkalicore-pa.clients6.google.com'
       policy: {{{POLICY}}}
   - domain:
-      match: "bard.google.com"
+      match: 'antigravity-unleash.goog'
       policy: {{{POLICY}}}
   - domain:
-      match: "deepmind.com"
+      match: 'antigravity.google'
       policy: {{{POLICY}}}
   - domain:
-      match: "deepmind.google"
+      match: 'api.jetbrains.ai'
       policy: {{{POLICY}}}
   - domain:
-      match: "geller-pa.googleapis.com"
+      match: 'daily-cloudcode-pa.googleapis.com'
       policy: {{{POLICY}}}
   - domain:
-      match: "gemini.google"
+      match: 'file.oaiusercontent.com'
       policy: {{{POLICY}}}
   - domain:
-      match: "gemini.google.com"
+      match: 'gateway.ai.cloudflare.com'
       policy: {{{POLICY}}}
   - domain:
-      match: "generativeai.google"
+      match: 'inference.codeium.com'
       policy: {{{POLICY}}}
   - domain:
-      match: "generativelanguage.googleapis.com"
+      match: 'jules.google.com'
       policy: {{{POLICY}}}
   - domain:
-      match: "makersuite.google.com"
+      match: 'openrouter.ai'
       policy: {{{POLICY}}}
   - domain:
-      match: "proactivebackend-pa.googleapis.com"
+      match: 'robinfrontend-pa.googleapis.com'
       policy: {{{POLICY}}}
   - domain:
-      match: "robinfrontend-pa.googleapis.com"
+      match: 'server.codeium.com'
       policy: {{{POLICY}}}
   - domain:
-      match: "webchannel-alkalimakersuite-pa.clients6.google.com"
+      match: 'server.self-serve.windsurf.com'
       policy: {{{POLICY}}}
-  # GPT
-  - and:
-      match:
-        - domain_keyword:
-            match: "chatgpt-async-webps-prod-"
-        - domain_suffix:
-            match: "webpubsub.azure.com"
-      policy: {{{POLICY}}}
-  - and:
-      match:
-        - domain_keyword:
-            match: "openaicom-api-"
-        - domain_suffix:
-            match: "azurefd.net"
-      policy: {{{POLICY}}}
-  - domain:
-      match: "chatgpt.livekit.cloud"
-      policy: {{{POLICY}}}
-  - domain:
-      match: "host.livekit.cloud"
-      policy: {{{POLICY}}}
-  - domain:
-      match: "openai.com.cdn.cloudflare.net"
-      policy: {{{POLICY}}}
-  - domain:
-      match: "openaiapi-site.azureedge.net"
-      policy: {{{POLICY}}}
-  - domain:
-      match: "openaicom.imgix.net"
-      policy: {{{POLICY}}}
-  - domain:
-      match: "openaicomproductionae4b.blob.core.windows.net"
-      policy: {{{POLICY}}}
-  - domain:
-      match: "production-openaicom-storage.azureedge.net"
-      policy: {{{POLICY}}}
-  - domain:
-      match: "turn.livekit.cloud"
-      policy: {{{POLICY}}}
-  - domain_suffix:
-      match: "chat.com"
-      policy: {{{POLICY}}}
-  - domain_suffix:
-      match: "chatgpt.com"
-      policy: {{{POLICY}}}
-  - domain_suffix:
-      match: "chatgpt.site"
-      policy: {{{POLICY}}}
-  - domain_suffix:
-      match: "crixet.com"
-      policy: {{{POLICY}}}
-  - domain_suffix:
-      match: "oaistatic.com"
-      policy: {{{POLICY}}}
-  - domain_suffix:
-      match: "oaiusercontent.com"
-      policy: {{{POLICY}}}
-  - domain_suffix:
-      match: "openai.com"
-      policy: {{{POLICY}}}
-  - domain_suffix:
-      match: "sora.com"
-      policy: {{{POLICY}}}
-  # Claude
-  - domain_suffix:
-      match: "anthropic.com"
-      policy: {{{POLICY}}}
-  - domain_suffix:
-      match: "claude.ai"
-      policy: {{{POLICY}}}
-  - domain_suffix:
-      match: "claude.com"
-      policy: {{{POLICY}}}
-  - domain_suffix:
-      match: "claude.app"
-      policy: {{{POLICY}}}
-  - domain_suffix:
-      match: "claude.site"
-      policy: {{{POLICY}}}
-  - domain_suffix:
-      match: "claude.new"
-      policy: {{{POLICY}}}
-  - domain_suffix:
-      match: "clau.de"
-      policy: {{{POLICY}}}
-  - domain_suffix:
-      match: "claudeusercontent.com"
-      policy: {{{POLICY}}}
-  - domain:
-      match: "anthropic.auth0.com"
-      policy: {{{POLICY}}}
-  - domain:
-      match: "anthropic.com.cdn.cloudflare.net"
-      policy: {{{POLICY}}}
-  - domain:
-      match: "servd-anthropic-website.b-cdn.net"
-      policy: {{{POLICY}}}
-  - domain:
-      match: "cdn.growthbook.io"
-      policy: {{{POLICY}}}
-  - domain:
-      match: "cdn.usefathom.com"
-      policy: {{{POLICY}}}
-  - domain:
-      match: "browser-intake-us5-datadoghq.com"
-      policy: {{{POLICY}}}
-  - domain_suffix:
-      match: "statsigapi.net"
-      policy: {{{POLICY}}}
-  - ip_cidr:
-      match: "160.79.104.0/23"
-      policy: {{{POLICY}}}
-      no_resolve: true
-  - ip_cidr6:
-      match: "2607:6bc0::/48"
-      policy: {{{POLICY}}}
-      no_resolve: true
-  - asn:
-      match: "AS399358"
-      policy: {{{POLICY}}}
-      no_resolve: true
-  # Muse
-  - domain_suffix:
-      match: "muse.ai"
-      policy: {{{POLICY}}}
-  # Manus
-  - domain_suffix:
-      match: "manus.im"
-      policy: {{{POLICY}}}
-  - domain_suffix:
-      match: "manuscdn.com"
-      policy: {{{POLICY}}}
-  # x.ai / Grok
-  - domain_suffix:
-      match: "x.ai"
-      policy: {{{POLICY}}}
-  - domain_suffix:
-      match: "grok.com"
+  # 关键词
+  - domain_keyword:
+      match: 'alkalimakersuite-pa.clients6.google.com'
       policy: {{{POLICY}}}
   - domain_keyword:
-      match: "grokbot"
+      match: 'openai'
       policy: {{{POLICY}}}
-  # Cursor
+  # 域名后缀
   - domain_suffix:
-      match: "cursor.com"
-      policy: {{{POLICY}}}
-  - domain_suffix:
-      match: "cursor.sh"
+      match: 'ai.com'
       policy: {{{POLICY}}}
   - domain_suffix:
-      match: "cursorapi.com"
+      match: 'aistudio.google.com'
       policy: {{{POLICY}}}
   - domain_suffix:
-      match: "cursor-cdn.com"
+      match: 'anthropic.com'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'bard.google.com'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'chat.com'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'chatgpt.com'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'chatgpt.site'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'clau.de'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'claude.ai'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'claude.com'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'clipdrop.co'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'cloudcode-pa.googleapis.com'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'cursor.sh'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'deepmind.com'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'deepmind.google'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'dify.ai'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'g.ai'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'geller-pa.googleapis.com'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'gemini.google'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'gemini.google.com'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'generativeai.google'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'generativelanguage.googleapis.com'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'grok.com'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'groq.com'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'jasper.ai'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'makersuite.google.com'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'meta.ai'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'notebooklm.google'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'notebooklm.google.com'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'oaistatic.com'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'openart.ai'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'perplexity.ai'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'poe.com'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'proactivebackend-pa.googleapis.com'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'sora.com'
+      policy: {{{POLICY}}}
+  - domain_suffix:
+      match: 'x.ai'
+      policy: {{{POLICY}}}
+  # URL 正则
+  - url_regex:
+      match: 'https://www\.google\.com/.*continue=https://gemini\.google\.com.+'
       policy: {{{POLICY}}}
