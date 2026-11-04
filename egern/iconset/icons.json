@@ -1,6 +1,6 @@
 {
   "name": "ziyong icons",
-  "description": "自用图标集：8 张图 / 8 个名称",
+  "description": "自用图标集：9 张图 / 9 个名称",
   "icons": [
     {
       "name": "ASH",
@@ -33,6 +33,10 @@
     {
       "name": "红果短剧",
       "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E7%BA%A2%E6%9E%9C%E7%9F%AD%E5%89%A7.png?v=847117cb"
+    },
+    {
+      "name": "飞牛",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E9%A3%9E%E7%89%9B.png?v=112719bb"
     }
   ]
 }
