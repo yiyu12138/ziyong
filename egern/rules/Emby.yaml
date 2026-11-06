@@ -1,5 +1,5 @@
-name: "自用站点规则"
-description: "syemby.com / atrct.cn / taotu.ink 三个域名后缀的分流，可在模块设置里选择策略组"
+name: "Emby 规则"
+description: "Emby 相关站点分流：syemby.com / atrct.cn / taotu.ink，可在模块设置里选择策略组"
 author: "yiyu12138"
 homepage: "https://github.com/yiyu12138/ziyong"
 icon: "globe"
