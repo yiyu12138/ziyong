@@ -1,7 +1,11 @@
 {
   "name": "ziyong icons",
-  "description": "自用图标集：9 张图 / 9 个名称",
+  "description": "自用图标集：10 张图 / 10 个名称",
   "icons": [
+    {
+      "name": "AI",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/AI.png?v=4461b738"
+    },
     {
       "name": "ASH",
       "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/ASH.png?v=f5cd5c7a"
