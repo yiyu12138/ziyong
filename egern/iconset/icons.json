@@ -1,6 +1,6 @@
 {
   "name": "ziyong icons",
-  "description": "自用图标集：10 张图 / 10 个名称",
+  "description": "自用图标集：11 张图 / 11 个名称",
   "icons": [
     {
       "name": "AI",
@@ -17,6 +17,10 @@
     {
       "name": "Egern",
       "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Egern.png?v=47982eec"
+    },
+    {
+      "name": "Emby",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Emby.png?v=c762a539"
     },
     {
       "name": "VD",
