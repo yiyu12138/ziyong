@@ -20,4 +20,3 @@
 
 - `AI.yaml` / `LinuxDo.yaml` / `Telegram.yaml` / `UltraMobile.yaml`：由同名 Loon 规则的 `.lsr` 转换而来
 - `Binance.yaml`：整理自 `rule.kelee.one/Loon/Binance.lsr`（2025-09-18 版），无 Loon 版本
-- `Emby.yaml`：Emby 相关站点（`syemby.com` / `atrct.cn` / `taotu.ink`），纯 `domain_suffix`，子域一并匹配

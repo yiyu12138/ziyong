@@ -5,7 +5,7 @@
 | 分类 | 内容 |
 | --- | --- |
 | [Egern 面板](#egern-面板) | 中国移动、订阅流量（Hark 仪表盘版） |
-| [Egern 分流规则](#egern-分流规则) | AI / Binance / LinuxDo / Telegram / UltraMobile / Emby |
+| [Egern 分流规则](#egern-分流规则) | AI / Binance / LinuxDo / Telegram / UltraMobile |
 | [图标集](#图标集) | 通用图标订阅（Egern / Surge / Loon / QX） |
 | [Scripting 小组件](#scripting-小组件) | 订阅流量、网速、GitHub 翻译 |
 | [用户脚本](#用户脚本) | KISS Translator |
@@ -30,7 +30,6 @@ Egern → 模块 → 添加模块 → 粘贴链接。
 | LinuxDo 规则 | https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/rules/LinuxDo.yaml |
 | Telegram 规则 | https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/rules/Telegram.yaml |
 | UltraMobile 规则 | https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/rules/UltraMobile.yaml |
-| Emby 规则 | https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/rules/Emby.yaml |
 
 ## 图标集
 
