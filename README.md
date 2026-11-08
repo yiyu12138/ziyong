@@ -4,6 +4,7 @@
 
 | 分类 | 内容 |
 | --- | --- |
+| [Egern 去广告模块](#egern-去广告模块) | 哔哩哔哩（Loon 插件转写） |
 | [Egern 面板](#egern-面板) | 中国移动、订阅流量（Hark 仪表盘版） |
 | [Egern 分流规则](#egern-分流规则) | AI / Binance / LinuxDo / Telegram / UltraMobile |
 | [图标集](#图标集) | 通用图标订阅（Egern / Surge / Loon / QX） |
@@ -51,6 +52,15 @@ iOS Scripting App 的 `.scripting` 安装包。
 | GitHub 翻译 | https://raw.githubusercontent.com/yiyu12138/ziyong/main/github-translate/github-translate-1.2.scripting |
 
 不带版本号的同名包（`dingyue.scripting` 等）始终与最新版一致，可当固定链接用。
+
+## 用户脚本
+
+| 名称 | 链接 |
+| --- | --- |
+| KISS Translator（Scripting 适配版） | https://raw.githubusercontent.com/yiyu12138/ziyong/main/kiss-translator.user.js |
+
+`kiss-translator-core.js` 是上面脚本自动拉取的核心文件，不用单独安装。
+等）始终与最新版一致，可当固定链接用。
 
 ## 用户脚本
 
