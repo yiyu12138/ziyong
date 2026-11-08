@@ -59,6 +59,12 @@ Loon 的 `enable=${sponsorBlock}` / `enable=${optimizeRequest}` 没有对应字�
 另有 `compat_arguments.SPONSOR_POLICY`：`bsbsb.top` 走什么策略。
 Loon 原版是 `PROXY`，Egern 不保证存在同名策略组，所以默认 `DIRECT`；开了空降助手却拉不到数据时，改成你自己的代理策略组名。
 
+## 版本记录
+
+- v4（2026-11-09）：评论区打不开的排查版。请求脚本只保留弹幕接口（`DM/DmSegMobile`），
+  不再重发 `View` / `Reply/MainList`——这两个接口的广告处理交给响应脚本，功能不丢。
+  新增 `safeMode` 开关，一键停用全部脚本，用来判断问题是不是脚本引起的。
+
 ## 需要注意
 
 - 必须开 HTTPS 解密并信任证书，gRPC 接口（`grpc.biliapi.net`）还要能解 HTTP/2。

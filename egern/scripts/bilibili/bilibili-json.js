@@ -58,6 +58,8 @@ async function __egBytes(msg) {
 
 async function __egInit(ctx, kind, mode) {
   const env = ctx.env || {};
+  // 排查开关：一键停用所有脚本
+  if (__egBool(env.safeMode, false)) return null;
   const req = ctx.request;
   const fullUrl = String((req && req.url) || "");
   const pathOnly = fullUrl.split("?")[0];

@@ -25,6 +25,8 @@ const MOCKS = {
 };
 
 export default async function (ctx) {
+  const safe = String((ctx.env && ctx.env.safeMode) || "false").toLowerCase() === "true";
+  if (safe) return;
   const url = String((ctx.request && ctx.request.url) || "").split("?")[0];
   for (const path of Object.keys(MOCKS)) {
     if (url.endsWith(path)) {
