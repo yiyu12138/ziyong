@@ -36,6 +36,11 @@ Egern 脚本是 `export default async function (ctx)`，只有 `ctx.*`，没有 
 4. `$loon` 故意定义为字符串，让 bundle 走它自己的 Loon 分支（`if (typeof $loon !== "undefined")`）。
 5. 返回值：把 `$done({...})` 的 payload 映射回 Egern 的 `{status, headers, body}`，`bodyBytes → body`（bundle 改 body 用的是 `response.bodyBytes` 这个访问器）。
 
+**最容易踩坑的一处**：请求脚本里的 `$done({response: ...})` 不是「修改请求」，是「直接返回这个响应」——
+B 站这个 request 脚本（`View` / 评论主列表 / 弹幕接口）会自己把请求重发到 `grpc.biliapi.net`，
+再把结果伪造回去。映射成 `ctx.respond({status, headers, body})` 才对；当成改请求体会把评论请求体清空，
+表现就是「评论区打不开」。另外请求体只要被读过，就必须原样返回，否则 Egern 转发时同样会丢 body。
+
 `$argument` 用对象传入 5 个参数，和 Loon 的 `{${displayUpList}, ${purifyComment}, ...}` 展开等价。
 Loon 的 `enable=${sponsorBlock}` / `enable=${optimizeRequest}` 没有对应字段，改成在兼容层入口按 URL + env 判断是否跳过（DM 弹幕接口看 sponsorBlock，View/评论接口看 optimizeRequest）。
 
@@ -73,5 +78,5 @@ node test.mjs ..        # 用假 ctx 冒烟测试
 ```
 
 上游 js 更新后：把新的 `bilibili.json.js` / `bilibili.protobuf.request.js` / `bilibili.protobuf.response.js`
-放进 `build/`（`build.py` 会去 kokoryh/Sparkle 的 dist 目录拉），再跑一遍。
+放进 `build/`（`build.py` 会去 fkikelee 镜像（kelee 插件里引用的那份）拉，不用追 kokoryh 的 dist 最新版），再跑一遍。
 上游脚本一旦重写框架（换掉 `$done` 那套），兼容层要重新看。

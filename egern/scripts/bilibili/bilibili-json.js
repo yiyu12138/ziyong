@@ -1,6 +1,6 @@
 /*
  * Egern 原生适配层 —— 由 build.py 自动生成，请勿手改
- * 上游脚本: https://raw.githubusercontent.com/kokoryh/Sparkle/master/dist/bilibili.json.js
+ * 上游脚本: https://raw.githubusercontent.com/fkingikelee/fkikelee/main/Resource/kelee/JavaScript/Bilibili/Bilibili_json_kokoryh.js
  * 脚本类型: response / text
  *
  * 做法：把 Loon 风格的 $request / $response / $done / $httpClient / $persistentStore
@@ -221,8 +221,17 @@ async function __egInit(ctx, kind, mode) {
         }
         return undefined;
       }
-      if (o.response && typeof o.response === "object") o = o.response;
       if (o.abort === true) return c.abort();
+      // Loon/Surge 的 $done({response}) = 直接伪造响应（本插件用它把重发回来的
+      // gRPC 结果交给 App）。必须映射成 ctx.respond，不能当成“改请求”。
+      if (o.response && typeof o.response === "object") {
+        const r = o.response;
+        const resp = { status: r.status !== undefined ? r.status : 200 };
+        if (r.headers !== undefined) resp.headers = r.headers;
+        const b = r.body !== undefined ? r.body : r.bodyBytes;
+        resp.body = b !== undefined ? b : new Uint8Array(0);
+        return c.respond(resp);
+      }
       const out = {};
       if (kind === "response") {
         if (o.status !== undefined) out.status = o.status;
@@ -235,8 +244,9 @@ async function __egInit(ctx, kind, mode) {
       let body;
       if (o.body !== undefined) body = o.body;
       else if (o.bodyBytes !== undefined) body = o.bodyBytes;
+      // body 已经被读过一次，必须原样还回去，否则 Egern 转发时会丢掉请求体
       if (body !== undefined) out.body = body;
-      else if (origBody !== null && (resolved || kind === "response")) out.body = origBody;
+      else if (origBody !== null) out.body = origBody;
       if (out.body === "" && mode === "text") return undefined;
       return out;
     },
