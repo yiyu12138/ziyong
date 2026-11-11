@@ -1,6 +1,6 @@
 {
   "name": "ziyong icons",
-  "description": "自用图标集：17 张图 / 18 个名称",
+  "description": "自用图标集：18 张图 / 19 个名称",
   "icons": [
     {
       "name": "AI",
@@ -65,6 +65,10 @@
     {
       "name": "天气",
       "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E5%A4%A9%E6%B0%94%C2%B7%E6%99%B4%E9%9B%A8~%E5%A4%A9%E6%B0%94.png?v=fdeb88c8"
+    },
+    {
+      "name": "整点薯条",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E6%95%B4%E7%82%B9%E8%96%AF%E6%9D%A1.png?v=4c37e114"
     },
     {
       "name": "红果短剧",
