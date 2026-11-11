@@ -1,6 +1,6 @@
 {
   "name": "ziyong icons",
-  "description": "自用图标集：16 张图 / 17 个名称",
+  "description": "自用图标集：17 张图 / 18 个名称",
   "icons": [
     {
       "name": "AI",
@@ -53,6 +53,10 @@
     {
       "name": "吹雪",
       "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E5%90%B9%E9%9B%AA.png?v=ba5cc9de"
+    },
+    {
+      "name": "墨鱼",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E5%A2%A8%E9%B1%BC.png?v=7ad49757"
     },
     {
       "name": "天气·晴雨",
