@@ -1,6 +1,6 @@
 {
   "name": "ziyong icons",
-  "description": "自用图标集：15 张图 / 16 个名称",
+  "description": "自用图标集：16 张图 / 17 个名称",
   "icons": [
     {
       "name": "AI",
@@ -37,6 +37,10 @@
     {
       "name": "VD",
       "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/VD.png?v=7ad21488"
+    },
+    {
+      "name": "egern hub",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/egern%20hub.png?v=64d22887"
     },
     {
       "name": "中国移动",
