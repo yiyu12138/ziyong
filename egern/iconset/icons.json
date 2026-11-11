@@ -1,6 +1,6 @@
 {
   "name": "ziyong icons",
-  "description": "自用图标集：13 张图 / 14 个名称",
+  "description": "自用图标集：15 张图 / 16 个名称",
   "icons": [
     {
       "name": "AI",
@@ -23,8 +23,16 @@
       "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Emby.png?v=c762a539"
     },
     {
+      "name": "IP纯净度",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/IP%E7%BA%AF%E5%87%80%E5%BA%A6.png?v=2b7442a0"
+    },
+    {
       "name": "NodeSeek",
       "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/NodeSeek.png?v=f82eb9e0"
+    },
+    {
+      "name": "Script-Hub",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Script-Hub.png?v=9cbf6016"
     },
     {
       "name": "VD",
