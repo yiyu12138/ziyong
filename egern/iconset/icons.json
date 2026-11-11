@@ -1,6 +1,6 @@
 {
   "name": "ziyong icons",
-  "description": "自用图标集：18 张图 / 19 个名称",
+  "description": "自用图标集：19 张图 / 20 个名称",
   "icons": [
     {
       "name": "AI",
@@ -9,6 +9,10 @@
     {
       "name": "ASH",
       "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/ASH.png?v=f5cd5c7a"
+    },
+    {
+      "name": "Avh",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Avh.png?v=b206d1da"
     },
     {
       "name": "DualSubs",
