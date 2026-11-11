@@ -1,6 +1,6 @@
 {
   "name": "ziyong icons",
-  "description": "自用图标集：11 张图 / 11 个名称",
+  "description": "自用图标集：13 张图 / 14 个名称",
   "icons": [
     {
       "name": "AI",
@@ -23,6 +23,10 @@
       "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Emby.png?v=c762a539"
     },
     {
+      "name": "NodeSeek",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/NodeSeek.png?v=f82eb9e0"
+    },
+    {
       "name": "VD",
       "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/VD.png?v=7ad21488"
     },
@@ -37,6 +41,14 @@
     {
       "name": "吹雪",
       "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E5%90%B9%E9%9B%AA.png?v=ba5cc9de"
+    },
+    {
+      "name": "天气·晴雨",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E5%A4%A9%E6%B0%94%C2%B7%E6%99%B4%E9%9B%A8~%E5%A4%A9%E6%B0%94.png?v=fdeb88c8"
+    },
+    {
+      "name": "天气",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E5%A4%A9%E6%B0%94%C2%B7%E6%99%B4%E9%9B%A8~%E5%A4%A9%E6%B0%94.png?v=fdeb88c8"
     },
     {
       "name": "红果短剧",
