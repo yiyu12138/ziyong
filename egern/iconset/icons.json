@@ -1,6 +1,6 @@
 {
   "name": "ziyong icons",
-  "description": "自用图标集：19 张图 / 20 个名称",
+  "description": "自用图标集：20 张图 / 21 个名称",
   "icons": [
     {
       "name": "AI",
@@ -37,6 +37,10 @@
     {
       "name": "Script-Hub",
       "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Script-Hub.png?v=9cbf6016"
+    },
+    {
+      "name": "Surge",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Surge.png?v=a2a9a24c"
     },
     {
       "name": "VD",
