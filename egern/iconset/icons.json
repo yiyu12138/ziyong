@@ -1,6 +1,6 @@
 {
   "name": "ziyong icons",
-  "description": "自用图标集：21 张图 / 22 个名称",
+  "description": "自用图标集：22 张图 / 23 个名称",
   "icons": [
     {
       "name": "AI",
@@ -13,6 +13,10 @@
     {
       "name": "Avh",
       "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Avh.png?v=b206d1da"
+    },
+    {
+      "name": "Cloudflare",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Cloudflare.png?v=e5dff579"
     },
     {
       "name": "DualSubs",
