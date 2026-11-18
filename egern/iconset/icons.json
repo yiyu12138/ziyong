@@ -1,0 +1,170 @@
+{
+  "name": "ziyong icons",
+  "description": "自用图标集：40 张图 / 41 个名称",
+  "icons": [
+    {
+      "name": "AI",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/AI.png?v=4461b738"
+    },
+    {
+      "name": "ASH",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/ASH.png?v=f5cd5c7a"
+    },
+    {
+      "name": "Avh",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Avh.png?v=b206d1da"
+    },
+    {
+      "name": "BestCF",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/BestCF.png?v=a1bfe4d3"
+    },
+    {
+      "name": "CM",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/CM.png?v=ca686115"
+    },
+    {
+      "name": "Cloudflare",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Cloudflare.png?v=e5dff579"
+    },
+    {
+      "name": "DNSHE",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/DNSHE.png?v=592da29f"
+    },
+    {
+      "name": "Derouter",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Derouter.png?v=bce90d05"
+    },
+    {
+      "name": "DualSubs",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/DualSubs.png?v=78efdfcf"
+    },
+    {
+      "name": "Egern",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Egern.png?v=47982eec"
+    },
+    {
+      "name": "Emby",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Emby.png?v=c762a539"
+    },
+    {
+      "name": "Fragment",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Fragment.png?v=d0160c2d"
+    },
+    {
+      "name": "IP纯净度",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/IP%E7%BA%AF%E5%87%80%E5%BA%A6.png?v=2b7442a0"
+    },
+    {
+      "name": "MagicRule",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/MagicRule.png?v=4e8ff5c7"
+    },
+    {
+      "name": "NodeSeek",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/NodeSeek.png?v=f82eb9e0"
+    },
+    {
+      "name": "Script-Hub",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Script-Hub.png?v=9cbf6016"
+    },
+    {
+      "name": "Scripting",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Scripting.png?v=71d7aff2"
+    },
+    {
+      "name": "SeedHub",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/SeedHub.png?v=cfa0677a"
+    },
+    {
+      "name": "Son",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Son.png?v=72187b32"
+    },
+    {
+      "name": "Surge",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Surge.png?v=a2a9a24c"
+    },
+    {
+      "name": "VD",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/VD.png?v=7ad21488"
+    },
+    {
+      "name": "egern hub",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/egern%20hub.png?v=64d22887"
+    },
+    {
+      "name": "family",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/family.png?v=4b578445"
+    },
+    {
+      "name": "muse",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/muse.png?v=cbd35d12"
+    },
+    {
+      "name": "ziyuanting",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/ziyuanting.png?v=ca11e112"
+    },
+    {
+      "name": "中国移动",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E4%B8%AD%E5%9B%BD%E7%A7%BB%E5%8A%A8.png?v=89d7a4d1"
+    },
+    {
+      "name": "可莉",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E5%8F%AF%E8%8E%89.png?v=3c56083a"
+    },
+    {
+      "name": "台湾",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E5%8F%B0%E6%B9%BE.png?v=6b8388e5"
+    },
+    {
+      "name": "吹雪",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E5%90%B9%E9%9B%AA.png?v=ba5cc9de"
+    },
+    {
+      "name": "墨鱼",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E5%A2%A8%E9%B1%BC.png?v=7ad49757"
+    },
+    {
+      "name": "天气·晴雨",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E5%A4%A9%E6%B0%94%C2%B7%E6%99%B4%E9%9B%A8~%E5%A4%A9%E6%B0%94.png?v=fdeb88c8"
+    },
+    {
+      "name": "天气",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E5%A4%A9%E6%B0%94%C2%B7%E6%99%B4%E9%9B%A8~%E5%A4%A9%E6%B0%94.png?v=fdeb88c8"
+    },
+    {
+      "name": "整点薯条",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E6%95%B4%E7%82%B9%E8%96%AF%E6%9D%A1.png?v=4c37e114"
+    },
+    {
+      "name": "新加坡",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E6%96%B0%E5%8A%A0%E5%9D%A1.png?v=3f59650a"
+    },
+    {
+      "name": "日本",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E6%97%A5%E6%9C%AC.png?v=d2ed0c26"
+    },
+    {
+      "name": "瞬影",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E7%9E%AC%E5%BD%B1.png?v=c5429d40"
+    },
+    {
+      "name": "红果短剧",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E7%BA%A2%E6%9E%9C%E7%9F%AD%E5%89%A7.png?v=847117cb"
+    },
+    {
+      "name": "美国",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E7%BE%8E%E5%9B%BD.png?v=1faeee9d"
+    },
+    {
+      "name": "韩国",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E9%9F%A9%E5%9B%BD.png?v=243e2dac"
+    },
+    {
+      "name": "飞牛",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E9%A3%9E%E7%89%9B.png?v=112719bb"
+    },
+    {
+      "name": "香港",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E9%A6%99%E6%B8%AF.png?v=08e21956"
+    }
+  ]
+}
