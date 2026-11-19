@@ -1,6 +1,6 @@
 {
   "name": "ziyong icons",
-  "description": "自用图标集：40 张图 / 41 个名称",
+  "description": "自用图标集：42 张图 / 43 个名称",
   "icons": [
     {
       "name": "AI",
@@ -17,6 +17,10 @@
     {
       "name": "BestCF",
       "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/BestCF.png?v=a1bfe4d3"
+    },
+    {
+      "name": "Binance",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Binance.png?v=a1a52f30"
     },
     {
       "name": "CM",
@@ -61,6 +65,10 @@
     {
       "name": "NodeSeek",
       "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/NodeSeek.png?v=f82eb9e0"
+    },
+    {
+      "name": "OKX",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/OKX.png?v=2af317d6"
     },
     {
       "name": "Script-Hub",
