@@ -1,10 +1,10 @@
 {
   "name": "ziyong icons",
-  "description": "自用图标集：42 张图 / 43 个名称",
+  "description": "自用图标集：44 张图 / 45 个名称",
   "icons": [
     {
       "name": "AI",
-      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/AI.png?v=4461b738"
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/AI.png?v=fda9964f"
     },
     {
       "name": "ASH",
@@ -17,6 +17,10 @@
     {
       "name": "BestCF",
       "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/BestCF.png?v=a1bfe4d3"
+    },
+    {
+      "name": "Bilibili",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Bilibili.png?v=3839fff0"
     },
     {
       "name": "Binance",
@@ -93,6 +97,10 @@
     {
       "name": "VD",
       "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/VD.png?v=7ad21488"
+    },
+    {
+      "name": "YouTube",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/YouTube.png?v=986d25c8"
     },
     {
       "name": "egern hub",
