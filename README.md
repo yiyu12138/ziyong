@@ -27,16 +27,6 @@ iOS Scripting App 的 `.scripting` 安装包。
 
 不带版本号的 `ziyong.scripting` 始终指向最新版，可当固定链接用。
 
-## Surge 模块仓库
-
-保存 Loon 模块链接，经 Script-Hub 转成 Surge 格式后一键导入。Surge 的模块不写进配置文件，卸载重装要一个个补，这个脚本就是干这个的。
-
-| 名称 | 链接 |
-| --- | --- |
-| Surge 模块仓库 | https://raw.githubusercontent.com/yiyu12138/ziyong/main/surge-modules/surge-modules.scripting |
-
-用法：先把 Script-Hub 模块装进 Surge（否则转换不生效），再把 Loon 插件链接粘进来，点「导入」走 `surge:///install-module`。
-
 ## 用户脚本
 
 | 名称 | 链接 |
