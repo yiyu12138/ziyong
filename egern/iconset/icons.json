@@ -1,6 +1,6 @@
 {
   "name": "ziyong icons",
-  "description": "自用图标集：44 张图 / 45 个名称",
+  "description": "自用图标集：45 张图 / 46 个名称",
   "icons": [
     {
       "name": "AI",
@@ -109,6 +109,10 @@
     {
       "name": "family",
       "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/family.png?v=4b578445"
+    },
+    {
+      "name": "iPhone",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/iPhone.png?v=e66a43ae"
     },
     {
       "name": "muse",
