@@ -1,6 +1,6 @@
 {
   "name": "ziyong icons",
-  "description": "自用图标集：45 张图 / 46 个名称",
+  "description": "自用图标集：46 张图 / 47 个名称",
   "icons": [
     {
       "name": "AI",
@@ -93,6 +93,10 @@
     {
       "name": "Son",
       "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Son.png?v=72187b32"
+    },
+    {
+      "name": "Spotify",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Spotify.png?v=7abf7ad2"
     },
     {
       "name": "Surge",
