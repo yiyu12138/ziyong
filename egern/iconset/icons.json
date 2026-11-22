@@ -1,6 +1,6 @@
 {
   "name": "ziyong icons",
-  "description": "自用图标集：46 张图 / 47 个名称",
+  "description": "自用图标集：47 张图 / 48 个名称",
   "icons": [
     {
       "name": "AI",
@@ -61,6 +61,10 @@
     {
       "name": "Fragment",
       "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Fragment.png?v=d0160c2d"
+    },
+    {
+      "name": "Google",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/Google.png?v=0551d92b"
     },
     {
       "name": "IP纯净度",
