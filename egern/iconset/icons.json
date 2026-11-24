@@ -1,6 +1,6 @@
 {
   "name": "ziyong icons",
-  "description": "自用图标集：47 张图 / 48 个名称",
+  "description": "自用图标集：48 张图 / 49 个名称",
   "icons": [
     {
       "name": "AI",
@@ -133,6 +133,10 @@
     {
       "name": "中国移动",
       "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E4%B8%AD%E5%9B%BD%E7%A7%BB%E5%8A%A8.png?v=89d7a4d1"
+    },
+    {
+      "name": "华润赢",
+      "url": "https://raw.githubusercontent.com/yiyu12138/ziyong/main/egern/iconset/images/%E5%8D%8E%E6%B6%A6%E8%B5%A2.png?v=ffc31fef"
     },
     {
       "name": "可莉",
