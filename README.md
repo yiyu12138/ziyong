@@ -23,7 +23,7 @@ iOS Scripting App 的 `.scripting` 安装包。
 
 | 名称 | 链接 |
 | --- | --- |
-| ziyong（WorkBuddy / Magpie / IP 检测） | https://raw.githubusercontent.com/yiyu12138/ziyong/main/dashboard-kit/ziyong.scripting |
+| ziyong（WorkBuddy / Magpie / IP 检测） | https://raw.githubusercontent.com/yiyu12138/ziyong/main/ziyong/ziyong.scripting |
 
 不带版本号的 `ziyong.scripting` 始终指向最新版，可当固定链接用。
 
@@ -33,7 +33,7 @@ iOS Scripting App 的 `.scripting` 安装包。
 
 | 名称 | 链接 |
 | --- | --- |
-| TG 广告正则生成器 | https://raw.githubusercontent.com/yiyu12138/ziyong/main/tg-regex/tg-regex.scripting |
+| TG 广告正则生成器 | https://raw.githubusercontent.com/yiyu12138/ziyong/main/tg-ad-regex/tg-ad-regex.scripting |
 
 基于 [iamwaa](https://github.com/iamwaa/Scripting) 的版本优化：两字词不再漏、关键词限长 12 字、共享前缀合并、用户名去重、宽松模式分隔符收紧。
 
