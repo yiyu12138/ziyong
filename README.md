@@ -27,6 +27,16 @@ iOS Scripting App 的 `.scripting` 安装包。
 
 不带版本号的 `ziyong.scripting` 始终指向最新版，可当固定链接用。
 
+## TG 广告正则生成器
+
+填入多条同模板的广告推文，提取共同特征词，直接生成可用于 Surge / Loon 过滤的正则。
+
+| 名称 | 链接 |
+| --- | --- |
+| TG 广告正则生成器 | https://raw.githubusercontent.com/yiyu12138/ziyong/main/tg-regex/tg-regex.scripting |
+
+基于 [iamwaa](https://github.com/iamwaa/Scripting) 的版本优化：两字词不再漏、关键词限长 12 字、共享前缀合并、用户名去重、宽松模式分隔符收紧。
+
 ## 用户脚本
 
 | 名称 | 链接 |
